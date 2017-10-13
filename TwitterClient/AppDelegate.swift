@@ -8,15 +8,23 @@
 
 import UIKit
 import CoreData
+import SwifteriOS
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+    
+    var swifter: Swifter!
 
-
+    func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
+        Swifter.handleOpenURL(url)
+        return true
+    }
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        swifter = Swifter(consumerKey: "cpB8erNVGtNs3d089Mq7yGEa2", consumerSecret: "R2fc5uuuwnQ20JdiGYNYLnjMvT93Q7PpLll3muKCdiYEOnQPyI")
         return true
     }
 

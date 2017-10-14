@@ -59,11 +59,8 @@ class TweetLinkTableViewCell: TweetTableViewCell {
         var extractedMetaData = [String:String]()
         
         if let open = html.range(of: "<head>"), let close = html.range(of: "</head>") {
-            let headTag = html.substring(with: open.lowerBound..<close.upperBound)
-            //print(headTag)
-            
+            let headTag = String(html[open.lowerBound..<close.upperBound])
             let metaNames = matches(for: "<meta name=\"[^\"]*\" content=\"[^\"]*\"", in: headTag)
-            
             for metaName in metaNames {
                 let stringParts = metaName.components(separatedBy: "\"")
                 extractedMetaData[stringParts[1]] = stringParts[3]

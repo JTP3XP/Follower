@@ -56,7 +56,7 @@ class AuthenticationViewController: UIViewController, SFSafariViewControllerDele
     
     func login() {
         let failureHandler: (Error) -> Void = { error in
-            self.alert(title: "Error", message: error.localizedDescription)
+            self.alert("Error", message: error.localizedDescription)
         }
         
         func assembleTokenQueryString(from tokenPartsArray: [String]) -> String {
@@ -97,7 +97,7 @@ class AuthenticationViewController: UIViewController, SFSafariViewControllerDele
         performSegue(withIdentifier: "LoginSuccess", sender: self)
     }
     
-    func alert(title: String, message: String) {
+    func alert(_ title: String, message: String) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         self.present(alert, animated: true, completion: nil)

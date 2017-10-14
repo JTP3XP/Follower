@@ -19,7 +19,7 @@ class TweetThreader {
     var printPrefix: String?
     let printDebugMessages = false
     
-    func createThread(completionHandler: @escaping ([Tweet]?) -> ()) {
+    func createThread(_ completionHandler: @escaping ([Tweet]?) -> ()) {
         
         guard let tweet = self.tweet else {
             print("Tried to create thread without setting TweetThreader's tweet variable")
@@ -131,7 +131,7 @@ class TweetThreader {
         
     }
     
-    static func sortChronologically(threadedTweets: [[Tweet]]) -> [[Tweet]] {
+    static func sortChronologically(_ threadedTweets: [[Tweet]]) -> [[Tweet]] {
         
         // the most recent tweet in a thread determines its sort order so that the most recent activity is always first
         

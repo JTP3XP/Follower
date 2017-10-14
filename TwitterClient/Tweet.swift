@@ -17,9 +17,9 @@ class Tweet: NSManagedObject {
         
         guard let tweetID = tweetJSON["id_str"].string else {
             enum TweetError: Error {
-                case RuntimeError(String)
+                case runtimeError(String)
             }
-            throw TweetError.RuntimeError("Passed a non-Tweet to findOrCreateTweet")
+            throw TweetError.runtimeError("Passed a non-Tweet to findOrCreateTweet")
         }
         
         let request: NSFetchRequest<Tweet> = Tweet.fetchRequest()

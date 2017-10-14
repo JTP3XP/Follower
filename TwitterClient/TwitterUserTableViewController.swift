@@ -77,7 +77,7 @@ class TwitterUserTableViewController: UITableViewController {
     func fetchTwitterHomeStream(forUserID userID: String) {
         
         let failureHandler: (Error) -> Void = { error in
-            self.alert(title: "Error", message: error.localizedDescription)
+            self.alert("Error", message: error.localizedDescription)
         }
         
         self.swifter.getTimeline(for: userID, count: 20, tweetMode: TweetMode.extended, success: { [weak self] json in
@@ -109,7 +109,7 @@ class TwitterUserTableViewController: UITableViewController {
                         
                         if threadedTweets.count == tweetsJSON.count {
                             let uniqueThreadedTweets = TweetThreader.removeRedundantThreads(from: threadedTweets)
-                            let sortedThreadedTweets = TweetThreader.sortChronologically(threadedTweets: uniqueThreadedTweets)
+                            let sortedThreadedTweets = TweetThreader.sortChronologically(uniqueThreadedTweets)
                             threadedTweetTableViewController.threadedTweets = sortedThreadedTweets
                             self?.navigationController?.pushViewController(threadedTweetTableViewController, animated: true)
                         }
@@ -124,7 +124,7 @@ class TwitterUserTableViewController: UITableViewController {
         
     }
     
-    func alert(title: String, message: String) {
+    func alert(_ title: String, message: String) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         self.present(alert, animated: true, completion: nil)

@@ -21,6 +21,7 @@ class ThreadedTweetTableViewController: UITableViewController {
     private var threadedTweetTableContents = [[TweetTableContents]]()
     
     private let reuseIdentifierForBasic: String = "Basic Tweet Cell"
+    private let reuseIdentifierForCard: String = "Link Tweet Cell"
     private let reuseIdentifierForAction: String = "Action Cell"
     
     @objc private func refresh() {
@@ -42,7 +43,8 @@ class ThreadedTweetTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch threadedTweetTableContents[indexPath.section][indexPath.row] {
         case .tweet(let tweet):
-            let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifierForBasic, for: indexPath) as! TweetTableViewCell
+            let reuseIdentifierForCell = tweet.card != nil ? reuseIdentifierForCard : reuseIdentifierForBasic
+            let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifierForCell, for: indexPath) as! TweetTableViewCell
             cell.tweet = tweet
             return cell
         case .action(let action):

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="12141" systemVersion="16G29" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <entity name="Hashtag" representedClassName="Hashtag" syncable="YES" codeGenerationType="category">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="13240" systemVersion="16G29" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Hashtag" representedClassName=".Hashtag" syncable="YES" codeGenerationType="category">
         <attribute name="endIndex" attributeType="Integer 16" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="startIndex" attributeType="Integer 16" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="text" attributeType="String" syncable="YES"/>
@@ -8,16 +8,38 @@
     </entity>
     <entity name="Tweet" representedClassName=".Tweet" syncable="YES" codeGenerationType="category">
         <attribute name="date" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="id" attributeType="String" indexed="YES" syncable="YES"/>
+        <attribute name="id" attributeType="String" syncable="YES"/>
+        <attribute name="isAQuote" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="isARetweet" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="originalJSON" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="parentID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="text" attributeType="String" syncable="YES"/>
-        <relationship name="hashtags" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Hashtag" inverseName="tweet" inverseEntity="Hashtag" syncable="YES"/>
+        <relationship name="card" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="TweetCard" inverseName="tweet" inverseEntity="TweetCard" syncable="YES"/>
+        <relationship name="hashtags" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Hashtag" inverseName="tweet" inverseEntity="Hashtag" syncable="YES"/>
+        <relationship name="isAQuoteOf" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Tweet" inverseName="wasQuotedBy" inverseEntity="Tweet" syncable="YES"/>
         <relationship name="isARetweetOf" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Tweet" inverseName="wasRetweetedBy" inverseEntity="Tweet" syncable="YES"/>
         <relationship name="tweeter" maxCount="1" deletionRule="Nullify" destinationEntity="TwitterUser" inverseName="tweets" inverseEntity="TwitterUser" syncable="YES"/>
-        <relationship name="userMentions" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="UserMention" inverseName="tweet" inverseEntity="UserMention" syncable="YES"/>
+        <relationship name="urls" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="TweetURL" inverseName="tweet" inverseEntity="TweetURL" syncable="YES"/>
+        <relationship name="userMentions" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="UserMention" inverseName="tweet" inverseEntity="UserMention" syncable="YES"/>
+        <relationship name="wasQuotedBy" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Tweet" inverseName="isAQuoteOf" inverseEntity="Tweet" syncable="YES"/>
         <relationship name="wasRetweetedBy" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Tweet" inverseName="isARetweetOf" inverseEntity="Tweet" syncable="YES"/>
+        <fetchIndex name="byIdIndex">
+            <fetchIndexElement property="id" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="TweetCard" representedClassName=".TweetCard" syncable="YES" codeGenerationType="category">
+        <attribute name="imageURL" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="relatedTweetURL" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TweetURL" inverseName="cardRepresentation" inverseEntity="TweetURL" syncable="YES"/>
+        <relationship name="tweet" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Tweet" inverseName="card" inverseEntity="Tweet" syncable="YES"/>
+    </entity>
+    <entity name="TweetURL" representedClassName=".TweetURL" syncable="YES" codeGenerationType="category">
+        <attribute name="endIndex" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="startIndex" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="urlString" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="cardRepresentation" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TweetCard" inverseName="relatedTweetURL" inverseEntity="TweetCard" syncable="YES"/>
+        <relationship name="tweet" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Tweet" inverseName="urls" inverseEntity="Tweet" syncable="YES"/>
     </entity>
     <entity name="TwitterUser" representedClassName=".TwitterUser" syncable="YES" codeGenerationType="category">
         <attribute name="fullName" attributeType="String" syncable="YES"/>
@@ -26,7 +48,7 @@
         <attribute name="username" attributeType="String" syncable="YES"/>
         <relationship name="tweets" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Tweet" inverseName="tweeter" inverseEntity="Tweet" syncable="YES"/>
     </entity>
-    <entity name="UserMention" representedClassName="UserMention" syncable="YES" codeGenerationType="category">
+    <entity name="UserMention" representedClassName=".UserMention" syncable="YES" codeGenerationType="category">
         <attribute name="endIndex" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="startIndex" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="userID" optional="YES" attributeType="String" syncable="YES"/>
@@ -34,9 +56,11 @@
         <relationship name="tweet" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Tweet" inverseName="userMentions" inverseEntity="Tweet" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Tweet" positionX="-65" positionY="-232" width="128" height="208"/>
-        <element name="TwitterUser" positionX="-252" positionY="-235" width="128" height="118"/>
-        <element name="Hashtag" positionX="151" positionY="-243" width="128" height="103"/>
-        <element name="UserMention" positionX="151" positionY="-103" width="128" height="118"/>
+        <element name="Hashtag" positionX="241" positionY="-108" width="128" height="103"/>
+        <element name="Tweet" positionX="-65" positionY="-232" width="128" height="283"/>
+        <element name="TweetCard" positionX="135" positionY="-289" width="128" height="118"/>
+        <element name="TweetURL" positionX="295" positionY="-244" width="128" height="118"/>
+        <element name="TwitterUser" positionX="-236" positionY="-234" width="128" height="118"/>
+        <element name="UserMention" positionX="162" positionY="8" width="128" height="118"/>
     </elements>
 </model>

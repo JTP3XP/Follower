@@ -14,24 +14,32 @@ class TwitterUserTableViewController: UITableViewController {
 
     var swifter: Swifter!
     let userNameList = ["@elonmusk"]
+    let users: [(username: String, userFullName: String, userID: String)] = [
+        ("@elonmusk","Elon Musk","44196397"),
+        ("@wired","Wired","1344951")
+    ]
     
     override func viewDidLoad() {
         super.viewDidLoad()
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         swifter = appDelegate.swifter
+
+        // Just for testing...
+        let container: NSPersistentContainer? = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer
+        guard let context = container?.viewContext else { return }
+        deleteTweetsIfUserWantsTo(using: context)
     }
     
     // MARK: - Table view data source
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return userNameList.count
+        return users.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Twitter User Cell", for: indexPath)
 
-        cell.textLabel?.text = "Elon Musk"
-        cell.detailTextLabel?.text = userNameList[indexPath.row]
+        cell.textLabel?.text = users[indexPath.row].userFullName
+        cell.detailTextLabel?.text = users[indexPath.row].username
 
         return cell
     }
@@ -40,7 +48,7 @@ class TwitterUserTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         //let selectedUserName = userNameList[indexPath.row]
-        let selectedUserID = "44196397"
+        let selectedUserID = users[indexPath.row].userID
         
         fetchTwitterHomeStream(forUserID: selectedUserID)
     }
@@ -128,6 +136,26 @@ class TwitterUserTableViewController: UITableViewController {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         self.present(alert, animated: true, completion: nil)
+    }
+    
+    func deleteTweetsIfUserWantsTo(using context: NSManagedObjectContext) {
+        let deleteAlert = UIAlertController(title: "Clear existing Tweets?", message: "This is only for testing.", preferredStyle: UIAlertControllerStyle.alert)
+        
+        deleteAlert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { (action: UIAlertAction!) in
+            let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Tweet")
+            let batchDeleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+            do {
+                try context.execute(batchDeleteRequest)
+            } catch {
+                print("Error deleting data")
+            }
+        }))
+        
+        deleteAlert.addAction(UIAlertAction(title: "No", style: .cancel, handler: { (action: UIAlertAction!) in
+            return
+        }))
+        
+        present(deleteAlert, animated: true, completion: nil)
     }
     
 }

@@ -44,7 +44,10 @@ class AuthenticationViewController: UIViewController, SFSafariViewControllerDele
         super.viewDidLoad()
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         swifter = appDelegate.swifter
-        
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         if let _ = UserDefaults.standard.array(forKey: "token") {
             login()
         }

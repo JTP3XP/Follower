@@ -76,7 +76,11 @@ class TweetThreader {
                 let container: NSPersistentContainer? = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer
                 guard let context = container?.viewContext else { return }
                 let parentTweet = try! Tweet.findOrCreateTweet(matching: parentTweetJSON, in: context)
-                try? context.save()
+                do {
+                    try context.save()
+                } catch {
+                    fatalError("Failure to save context: \(error)")
+                }
                 
                 if self.printDebugMessages { print("\(self.printPrefix ?? "nil - ")\(getParentPrintPrefix)Got the parent tweet...") }
                 if let grandparentTweetID = parentTweet.parentID {

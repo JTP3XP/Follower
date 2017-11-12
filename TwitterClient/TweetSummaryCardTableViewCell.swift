@@ -8,11 +8,12 @@
 
 import UIKit
 
-class TweetLinkTableViewCell: TweetTableViewCell {
+class TweetSummaryCardTableViewCell: TweetTableViewCell {
 
     @IBOutlet weak var cardImageView: UIImageView!
     @IBOutlet weak var cardTitleLabel: UILabel!
     @IBOutlet weak var cardSubtitleLabel: UILabel!
+    @IBOutlet weak var CardImageLoadingIndicator: UIActivityIndicatorView!
     
     override func updateUI() {
         super.updateUI()
@@ -24,13 +25,16 @@ class TweetLinkTableViewCell: TweetTableViewCell {
         cardSubtitleLabel.text = tweet?.card?.relatedTweetURL?.urlString ?? ""
         
         // Set link picture
+        cardImageView.image = nil
+        CardImageLoadingIndicator.startAnimating()
         if let linkImageURL = tweet?.card?.imageURL {
             let lastLinkImageURL = linkImageURL // store the URL so we can check if it is still the same before we update UI on main thread
             DispatchQueue.global(qos: .userInitiated).async {
-                if let imageData = try? Data(contentsOf: URL(string: linkImageURL)!) {
+                if let imageData = try? Data(contentsOf: URL(string: linkImageURL.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)!) {
                     DispatchQueue.main.async { [weak self] in
                         if linkImageURL == lastLinkImageURL { // make sure we aren't coming back to a cell that got reused for another tweet before displaying result
                             self?.cardImageView.image = UIImage(data: imageData)
+                            self?.CardImageLoadingIndicator.stopAnimating()
                         }
                     }
                 } else {

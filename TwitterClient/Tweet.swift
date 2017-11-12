@@ -13,6 +13,16 @@ import UIKit
 
 class Tweet: NSManagedObject {
     
+    var textWithoutEntities: String? {
+        get {
+            return removeEntitiesFromText()
+        }
+    }
+    
+    func removeEntitiesFromText() -> String? {
+        // TODO: Wipe out entities from tweet text
+        return text
+    }
     class func findOrCreateTweet(matching tweetJSON: JSON, in context: NSManagedObjectContext) throws -> Tweet {
         
         guard let tweetID = tweetJSON["id_str"].string else {
@@ -82,6 +92,18 @@ class Tweet: NSManagedObject {
                 if let urlString = urlJSON["url"].string, let startIndex = urlJSON["indices"][0].integer, let endIndex = urlJSON["indices"][1].integer {
                     let newUrl = TweetURL.createTweetURL(from: urlString, startIndex: startIndex, endIndex: endIndex, in: context)
                     newUrl.tweet = tweet
+                }
+            }
+        }
+        
+        // Get images
+        if let mediaJSONArray = tweetJSON["extended_entities"]["media"].array {
+            for mediaJSON in mediaJSONArray where mediaJSON["type"] == "photo" {
+                do {
+                    let newImage = try TweetImage.findOrCreateTweetImage(matching: mediaJSON, in: context)
+                    newImage.tweet = tweet
+                } catch {
+                    throw error
                 }
             }
         }

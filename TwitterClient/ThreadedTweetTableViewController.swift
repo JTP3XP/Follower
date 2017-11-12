@@ -21,7 +21,9 @@ class ThreadedTweetTableViewController: UITableViewController {
     private var threadedTweetTableContents = [[TweetTableContents]]()
     
     private let reuseIdentifierForBasic: String = "Basic Tweet Cell"
-    private let reuseIdentifierForCard: String = "Link Tweet Cell"
+    private let reuseIdentifierForImage: String = "Image Tweet Cell"
+    private let reuseIdentifierForSummaryCard: String = "Summary Card Tweet Cell"
+    private let reuseIdentifierForPlayerCard: String = "Player Card Tweet Cell"
     private let reuseIdentifierForAction: String = "Action Cell"
     
     @objc private func refresh() {
@@ -43,7 +45,24 @@ class ThreadedTweetTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch threadedTweetTableContents[indexPath.section][indexPath.row] {
         case .tweet(let tweet):
-            let reuseIdentifierForCell = tweet.card != nil ? reuseIdentifierForCard : reuseIdentifierForBasic
+            
+            // Set default resuse identifier, then use subsequent logic to pick any non-defaults
+            var reuseIdentifierForCell = reuseIdentifierForBasic
+            
+            if let tweetImageSet = tweet.images, tweetImageSet.count > 0 {
+                reuseIdentifierForCell = reuseIdentifierForImage
+            }
+            
+            // People often attach an image that is redundant with the card that would be built. In these cases we want to display as a card view
+            if let card = tweet.card, let cardType = card.type {
+                switch cardType {
+                case "player":
+                    reuseIdentifierForCell = reuseIdentifierForPlayerCard
+                default:
+                    reuseIdentifierForCell = reuseIdentifierForSummaryCard
+                }
+            }
+
             let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifierForCell, for: indexPath) as! TweetTableViewCell
             cell.tweet = tweet
             return cell

@@ -24,15 +24,19 @@ class TweetTableViewCell: UITableViewCell {
    // @IBOutlet weak var outermostStackView: UIStackView!
     
     func updateUI() {
-        if let tweet = tweet {
-            fullNameLabel.text = tweet.tweeter!.fullName
-            usernameLabel.text = "@\(tweet.tweeter!.username!)"
-            tweetTextLabel.text = tweet.text
-            tweetTimeLabel.text = (tweet.date! as Date).generateRelativeTimestamp()
+        
+        guard let tweet = tweet else {
+            return
         }
         
+        fullNameLabel.text = tweet.tweeter!.fullName
+        usernameLabel.text = "@\(tweet.tweeter!.username!)"
+        tweetTextLabel.text = tweet.textWithoutEntities
+        tweetTimeLabel.text = (tweet.date! as Date).generateRelativeTimestamp()
+        
         // Set profile picture
-        if let profileImageURL = tweet?.tweeter!.profileImageURL {
+        profileImageView.image = nil
+        if let profileImageURL = tweet.tweeter!.profileImageURL {
             let lastProfileImageURL = profileImageURL // store the URL so we can check if it is still the same before we update UI on main thread
             DispatchQueue.global(qos: .userInitiated).async {
                 if let imageData = try? Data(contentsOf: URL(string: profileImageURL)!) {
@@ -43,7 +47,9 @@ class TweetTableViewCell: UITableViewCell {
                     }
                 } else {
                     DispatchQueue.main.async { [weak self] in
-                        self?.profileImageView?.image = nil
+                        if profileImageURL == lastProfileImageURL {
+                            self?.profileImageView?.image = nil
+                        }
                     }
                 }
             }

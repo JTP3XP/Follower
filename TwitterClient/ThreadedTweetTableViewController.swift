@@ -8,8 +8,9 @@
 
 import UIKit
 import SwifteriOS
+import SafariServices
 
-class ThreadedTweetTableViewController: UITableViewController {
+class ThreadedTweetTableViewController: UITableViewController, TweetTableViewCellDelegate {
 
     var threadedTweets = [[Tweet]]()
     
@@ -30,6 +31,12 @@ class ThreadedTweetTableViewController: UITableViewController {
         refreshControl?.attributedTitle = NSAttributedString(string: "Loading newer tweets")
         refreshControl?.endRefreshing()
         refreshControl?.attributedTitle = NSAttributedString(string: "Load newer tweets")
+    }
+    
+    // MARK:- Tweet Table View Cell Delegate
+    func openInSafariViewController(url: URL) {
+        let safariViewController = SFSafariViewController(url: url)
+        present(safariViewController, animated: true, completion: nil)
     }
     
     // MARK: - Table View Data Source
@@ -65,6 +72,7 @@ class ThreadedTweetTableViewController: UITableViewController {
 
             let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifierForCell, for: indexPath) as! TweetTableViewCell
             cell.tweet = tweet
+            cell.delegate = self
             return cell
         case .action(let action):
             let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifierForAction, for: indexPath) as! ActionTableViewCell
@@ -96,7 +104,7 @@ class ThreadedTweetTableViewController: UITableViewController {
             print("\(action.text)")
         }
     }
-    
+ 
     // MARK: - View Controller Lifecycle
     
     override func viewDidLoad() {

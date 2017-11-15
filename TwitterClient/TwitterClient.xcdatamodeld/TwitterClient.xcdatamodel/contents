@@ -8,6 +8,8 @@
     </entity>
     <entity name="Tweet" representedClassName=".Tweet" syncable="YES" codeGenerationType="category">
         <attribute name="date" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="displayTextEndIndex" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="displayTextStartIndex" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="id" attributeType="String" syncable="YES"/>
         <attribute name="isAQuote" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="isARetweet" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
@@ -65,7 +67,7 @@
     </entity>
     <elements>
         <element name="Hashtag" positionX="241" positionY="-108" width="128" height="103"/>
-        <element name="Tweet" positionX="-65" positionY="-232" width="128" height="298"/>
+        <element name="Tweet" positionX="-65" positionY="-232" width="128" height="328"/>
         <element name="TweetCard" positionX="135" positionY="-289" width="128" height="118"/>
         <element name="TweetURL" positionX="295" positionY="-244" width="128" height="118"/>
         <element name="TwitterUser" positionX="-236" positionY="-234" width="128" height="118"/>

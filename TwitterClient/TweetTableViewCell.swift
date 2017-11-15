@@ -14,6 +14,7 @@ import CoreData
 class TweetTableViewCell: UITableViewCell {
 
     var tweet: Tweet? { didSet { updateUI() } }
+    var delegate: TweetTableViewCellDelegate?
     
     @IBOutlet weak var fullNameLabel: UILabel!
     @IBOutlet weak var usernameLabel: UILabel!
@@ -31,7 +32,7 @@ class TweetTableViewCell: UITableViewCell {
         
         fullNameLabel.text = tweet.tweeter!.fullName
         usernameLabel.text = "@\(tweet.tweeter!.username!)"
-        tweetTextLabel.text = tweet.textWithoutEntities
+        tweetTextLabel.text = tweet.displayText
         tweetTimeLabel.text = (tweet.date! as Date).generateRelativeTimestamp()
         
         // Set profile picture
@@ -67,4 +68,13 @@ class TweetTableViewCell: UITableViewCell {
         profileImageView.clipsToBounds = true
     }
 
+    func askDelegateToOpenInSafariViewController(url: URL) {
+        if let delegateThatOpensSafari = delegate {
+            delegateThatOpensSafari.openInSafariViewController(url: url)
+        }
+    }
+}
+
+protocol TweetTableViewCellDelegate {
+    func openInSafariViewController(url: URL)
 }

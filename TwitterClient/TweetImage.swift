@@ -12,7 +12,7 @@ import SwifteriOS
 
 class TweetImage: NSManagedObject {
 
-    class func findOrCreateTweetImage(matching tweetMediaJSON: JSON, in context: NSManagedObjectContext) throws -> TweetImage {
+    class func createTweetImage(matching tweetMediaJSON: JSON, in context: NSManagedObjectContext) throws -> TweetImage {
         
         guard let tweetMediaID = tweetMediaJSON["id_str"].string, tweetMediaJSON["type"].string == "photo", let startIndex = tweetMediaJSON["indices"][0].integer, let endIndex = tweetMediaJSON["indices"][1].integer else {
             enum TweetError: Error {

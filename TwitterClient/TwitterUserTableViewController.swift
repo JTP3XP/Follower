@@ -56,6 +56,13 @@ class TwitterUserTableViewController: UITableViewController {
     // MARK: - Temporary code
     
     @IBAction func testButtonPressed(_ sender: UIBarButtonItem) {
+        //printTweetJSON()
+        let container: NSPersistentContainer? = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer
+        guard let context = container?.viewContext else { return }
+        deleteTweetsIfUserWantsTo(using: context)
+    }
+
+    func printTweetJSON() {
         //1. Create the alert controller.
         let alert = UIAlertController(title: "Test tweet", message: "Use this to print tweet JSON to console", preferredStyle: .alert)
         
@@ -77,9 +84,7 @@ class TwitterUserTableViewController: UITableViewController {
         
         // 4. Present the alert.
         self.present(alert, animated: true, completion: nil)
-        
     }
-
 
     // MARK: - Stuff that may move later
     func fetchTwitterHomeStream(forUserID userID: String) {

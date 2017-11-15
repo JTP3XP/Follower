@@ -44,7 +44,23 @@ class TweetSummaryCardTableViewCell: TweetTableViewCell {
                 }
             }
         }
+        
+        // Set up a tap gesture recognizer on all parts of the card
+        let cardViews: [UIView] = [cardImageView, cardTitleLabel, cardSubtitleLabel]
+        
+        for cardView in cardViews {
+            let cardTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(cardTapped))
+            cardView.isUserInteractionEnabled = true
+            cardView.addGestureRecognizer(cardTapGestureRecognizer)
+        }
     }
 
+    @objc func cardTapped() {
+        print("Card tapped")
+        if let cardURLString = tweet?.card?.relatedTweetURL?.urlString, let cardURL = URL(string: cardURLString) {
+            //UIApplication.shared.open(cardURL, options: [:], completionHandler: nil)
+            askDelegateToOpenInSafariViewController(url: cardURL)
+        }
+    }
     
 }

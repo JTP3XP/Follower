@@ -13,16 +13,18 @@ import UIKit
 
 class Tweet: NSManagedObject {
     
-    var textWithoutEntities: String? {
+    var displayText: String? {
         get {
-            return removeEntitiesFromText()
+            if let tweetText = text {
+                let lowerBound = tweetText.index(tweetText.startIndex, offsetBy: Int(displayTextStartIndex))
+                let upperBound = tweetText.index(tweetText.startIndex, offsetBy: Int(displayTextEndIndex))
+                let displayedPortionOfText = String(tweetText[lowerBound..<upperBound])
+                return displayedPortionOfText
+            }
+            return text
         }
     }
     
-    func removeEntitiesFromText() -> String? {
-        // TODO: Wipe out entities from tweet text
-        return text
-    }
     class func findOrCreateTweet(matching tweetJSON: JSON, in context: NSManagedObjectContext) throws -> Tweet {
         
         guard let tweetID = tweetJSON["id_str"].string else {
@@ -51,6 +53,12 @@ class Tweet: NSManagedObject {
         tweet.parentID = tweetJSON["in_reply_to_status_id_str"].string
         tweet.text = tweetJSON["full_text"].string?.replacingEscapedTweetCharacters() ?? tweetJSON["text"].string?.replacingEscapedTweetCharacters() ?? ""
         tweet.originalJSON = "\(tweetJSON)"
+        
+        // Get display text range since we use extended tweets
+        if let startIndex = tweetJSON["display_text_range"][0].integer, let endIndex = tweetJSON["display_text_range"][1].integer {
+            tweet.displayTextStartIndex = Int16(startIndex)
+            tweet.displayTextEndIndex = Int16(endIndex)
+        }
         
         // Get date
         let formatter = DateFormatter()
@@ -100,7 +108,7 @@ class Tweet: NSManagedObject {
         if let mediaJSONArray = tweetJSON["extended_entities"]["media"].array {
             for mediaJSON in mediaJSONArray where mediaJSON["type"] == "photo" {
                 do {
-                    let newImage = try TweetImage.findOrCreateTweetImage(matching: mediaJSON, in: context)
+                    let newImage = try TweetImage.createTweetImage(matching: mediaJSON, in: context)
                     newImage.tweet = tweet
                 } catch {
                     throw error

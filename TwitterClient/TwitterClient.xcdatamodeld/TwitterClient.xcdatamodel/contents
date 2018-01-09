@@ -53,6 +53,7 @@
     </entity>
     <entity name="TwitterUser" representedClassName=".TwitterUser" syncable="YES" codeGenerationType="category">
         <attribute name="fullName" attributeType="String" syncable="YES"/>
+        <attribute name="isFollowed" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="profileImageURL" attributeType="String" syncable="YES"/>
         <attribute name="userID" attributeType="String" syncable="YES"/>
         <attribute name="username" attributeType="String" syncable="YES"/>
@@ -69,9 +70,9 @@
         <element name="Hashtag" positionX="241" positionY="-108" width="128" height="103"/>
         <element name="Tweet" positionX="-65" positionY="-232" width="128" height="328"/>
         <element name="TweetCard" positionX="135" positionY="-289" width="128" height="118"/>
-        <element name="TweetURL" positionX="295" positionY="-244" width="128" height="118"/>
-        <element name="TwitterUser" positionX="-236" positionY="-234" width="128" height="118"/>
-        <element name="UserMention" positionX="196" positionY="18" width="128" height="118"/>
         <element name="TweetImage" positionX="99" positionY="-423" width="128" height="118"/>
+        <element name="TweetURL" positionX="295" positionY="-244" width="128" height="118"/>
+        <element name="TwitterUser" positionX="-236" positionY="-234" width="128" height="133"/>
+        <element name="UserMention" positionX="196" positionY="18" width="128" height="118"/>
     </elements>
 </model>

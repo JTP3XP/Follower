@@ -15,9 +15,8 @@ class Tweet: NSManagedObject {
     
     var displayText: String? {
         get {
-            if let tweetText = text {
+            if let tweetText = text, let upperBound = tweetText.index(tweetText.startIndex, offsetBy: Int(displayTextEndIndex), limitedBy: tweetText.endIndex) {
                 let lowerBound = tweetText.index(tweetText.startIndex, offsetBy: Int(displayTextStartIndex))
-                let upperBound = tweetText.index(tweetText.startIndex, offsetBy: Int(displayTextEndIndex))
                 let displayedPortionOfText = String(tweetText[lowerBound..<upperBound])
                 return displayedPortionOfText
             }
@@ -139,7 +138,7 @@ class Tweet: NSManagedObject {
 }
 
 extension String {
-    
+
     func replacingEscapedTweetCharacters() -> String {
         
         let replacements: [(searchString: String, replacementString: String)] = [

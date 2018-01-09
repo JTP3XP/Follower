@@ -35,7 +35,7 @@ class TweetCardBuilder {
                 let htmlString = String(data: data!, encoding: String.Encoding.utf8) ?? "Couldn't get string"
                 let metaData = htmlString.extractMetaData()
                 
-                if let cardType = metaData["twitter:card"], let cardTitle = metaData["twitter:title"] ?? metaData["og:title"] {
+                if let cardType = metaData["twitter:card"], let cardTitle = metaData["twitter:title"]?.htmlDecoded ?? metaData["og:title"] {
                     var cardImageURL: String?
                     
                     if let htmlCardImageURL = metaData["twitter:image"] ?? metaData["og:image"] {
@@ -58,6 +58,15 @@ class TweetCardBuilder {
 }
 
 extension String {
+
+    var htmlDecoded: String {
+        let decoded = try? NSAttributedString(data: Data(utf8), options: [
+            .documentType: NSAttributedString.DocumentType.html,
+            .characterEncoding: String.Encoding.utf8.rawValue
+            ], documentAttributes: nil).string
+        
+        return decoded ?? self
+    }
     
     func matchedCaptureGroups(for regex: String) -> [[String]] {
         

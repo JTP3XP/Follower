@@ -13,6 +13,9 @@ import SafariServices
 class ThreadedTweetTableViewController: UITableViewController, TweetTableViewCellDelegate {
 
     var threadedTweets = [[Tweet]]()
+    var navigationBarTitle: String?
+    
+    @IBOutlet weak var titleNavigationItem: UINavigationItem!
     
     private enum TweetTableContents {
         case action((text: String, date: Date))
@@ -109,6 +112,11 @@ class ThreadedTweetTableViewController: UITableViewController, TweetTableViewCel
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if let tableTitle = navigationBarTitle {
+            titleNavigationItem.title = tableTitle
+        }
+        
         tableView.rowHeight = UITableViewAutomaticDimension // Autosize based on cell contents
         tableView.estimatedRowHeight = 120
         

@@ -29,11 +29,13 @@ import Accounts
 import Social
 import SwifteriOS
 import SafariServices
+import CoreData
 
 class AuthenticationViewController: UIViewController, SFSafariViewControllerDelegate {
     
     var swifter: Swifter!
     var authorizedToken: Credential.OAuthAccessToken?
+    @IBOutlet weak var loginButton: UIButton!
     
     private struct API {
         static let key : String = "cpB8erNVGtNs3d089Mq7yGEa2"
@@ -48,8 +50,14 @@ class AuthenticationViewController: UIViewController, SFSafariViewControllerDele
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if let _ = UserDefaults.standard.array(forKey: "token") {
-            login()
+        drawAndAnimateLoginScreen() { [weak self] in
+            if let _ = UserDefaults.standard.array(forKey: "token") {
+                self?.login()
+            } else {
+                if let loginButton = self?.loginButton {
+                    self?.view.bringSubview(toFront: loginButton)
+                }
+            }
         }
     }
     
@@ -63,7 +71,7 @@ class AuthenticationViewController: UIViewController, SFSafariViewControllerDele
         }
         
         func assembleTokenQueryString(from tokenPartsArray: [String]) -> String {
-            return "oauth_token=\(tokenPartsArray[0])&oauth_token_secret=\(tokenPartsArray[1])&user_id=\(tokenPartsArray[2])&screen_name=\(tokenPartsArray[3])&x_auth_expires=0"
+            return "oauth_token=\(tokenPartsArray[0])&oauth_token_secret=\(tokenPartsArray[1])&user_id=\(tokenPartsArray[3])&screen_name=\(tokenPartsArray[2])&x_auth_expires=0"
         }
         
         let url = URL(string: "swifter://success")!
@@ -97,7 +105,19 @@ class AuthenticationViewController: UIViewController, SFSafariViewControllerDele
     }
     
     func continueAfterSuccessfulLogin() {
-        performSegue(withIdentifier: "LoginSuccess", sender: self)
+        let twitterUserController = TwitterUserController()
+        twitterUserController.updateFollowedUsers {
+            self.performSegue(withIdentifier: "LoginSuccess2", sender: self)
+        }
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "LoginSuccess2" {
+            if let twitterUserCollectionViewController = segue.destination.contents as? TwitterUserCollectionViewController {
+                let twitterUserController = TwitterUserController()
+                twitterUserCollectionViewController.displayedUsers = twitterUserController.getMyFollowedUsers()
+            }
+        }
     }
     
     func alert(_ title: String, message: String) {
@@ -112,4 +132,141 @@ class AuthenticationViewController: UIViewController, SFSafariViewControllerDele
     }
     
     
+}
+
+// MARK:- Extensions
+
+extension UIViewController {
+    
+    var contents: UIViewController {
+        if let navigationController = self as? UINavigationController {
+            return navigationController.visibleViewController ?? self
+        } else {
+            return self
+        }
+    }
+}
+
+extension UIViewController {
+    
+    func drawAndAnimateLoginScreen(completionHandler: @escaping (() -> Void)) {
+        let containerView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: 375.0, height: 667.0))
+        containerView.addBackground()
+        self.view.addSubview(containerView)
+        
+        let twitterBlue = UIColor(red: 29/255, green: 161/255, blue: 242/255, alpha: 1)
+        
+        let bigCircleRadius: CGFloat = 145/2
+        let smallCircleRadius: CGFloat = bigCircleRadius/2
+        let pointsToLeftOfBigCircle: CGFloat = 14
+        let pointsAboveBigCircle: CGFloat = 35 + (containerView.frame.height >= 812 ? 30 : 0)
+        let verticalLineCenter: CGFloat = pointsToLeftOfBigCircle + bigCircleRadius
+        let verticalLineWidth: CGFloat = 8
+        let distanceBetweenCircles: CGFloat = 34
+        
+        // Big circle
+        let circle = UIButton(frame:  CGRect(x: 0.0, y: 0.0, width: 300.0, height: 300.0))
+        circle.center = containerView.center
+        circle.layer.cornerRadius = circle.frame.width / 2
+        circle.titleLabel?.text = "Follower"
+        let attributes: [NSAttributedStringKey: Any] = [
+            NSAttributedStringKey.font: UIFont(name: "AmericanTypewriter-Semibold", size: 52)!,
+            NSAttributedStringKey.foregroundColor: UIColor.white
+        ]
+        let title = NSAttributedString(string: "Follower", attributes: attributes)
+        circle.setAttributedTitle(title, for: .normal)
+        circle.backgroundColor = twitterBlue
+        
+        // Set target location for big circle
+        let target = UIView(frame: CGRect(x: 0.0, y: 0.0, width: bigCircleRadius * 2, height: bigCircleRadius * 2))
+        target.center = CGPoint(x: verticalLineCenter, y: pointsAboveBigCircle + bigCircleRadius)
+        target.layer.cornerRadius = target.frame.width / 2
+        target.backgroundColor = .clear
+        //target.layer.borderWidth = 2.0
+        
+        // Vertical line
+        let line = UIView(frame: CGRect(x: verticalLineCenter - verticalLineWidth/2, y: 0, width: verticalLineWidth, height: containerView.frame.height))
+        line.backgroundColor = twitterBlue
+        line.transform = CGAffineTransform.init(translationX: 0, y: -containerView.frame.height)
+        
+        // Smaller Circles
+        let firstSmallCircleCenterY: CGFloat = target.center.y + bigCircleRadius + smallCircleRadius + distanceBetweenCircles
+        var smallCircles = [UIView]()
+        var topOfNextCircle: CGFloat = firstSmallCircleCenterY - smallCircleRadius
+        var circleIndex = 0
+        while topOfNextCircle < containerView.frame.height {
+            let newCircleCenterY: CGFloat = firstSmallCircleCenterY + CGFloat(circleIndex) * (smallCircleRadius + distanceBetweenCircles + smallCircleRadius)
+            let newCircle = UIView(frame: CGRect(x: 0, y: 0, width: smallCircleRadius * 2, height: smallCircleRadius * 2))
+            newCircle.center = CGPoint(x: verticalLineCenter, y: newCircleCenterY)
+            newCircle.layer.cornerRadius = newCircle.frame.width / 2
+            newCircle.backgroundColor = twitterBlue
+            newCircle.transform = CGAffineTransform.init(scaleX: 0, y: 0)
+            
+            smallCircles.append(newCircle)
+            
+            // Calculate condition for while loop
+            topOfNextCircle = newCircleCenterY + smallCircleRadius + distanceBetweenCircles
+            circleIndex = circleIndex + 1
+        }
+        
+        containerView.addSubview(target)
+        containerView.addSubview(line)
+        containerView.addSubview(circle)
+        _ = smallCircles.map({ containerView.addSubview($0) })
+        
+        let secondsBeforeAnimation = 1
+        let bigCircleAnimationSeconds: TimeInterval = 1.0
+        let dropLineAnimationSeconds: TimeInterval = 1.0
+        let smallCircleAnimationSeconds: TimeInterval = 0.5
+        
+        let moveAndScaleAnimation = {
+            // Scale and move
+            let scaleValue: CGFloat = target.frame.width / circle.frame.width
+            let scale = CGAffineTransform(scaleX: scaleValue, y: scaleValue)
+            circle.transform = scale
+            circle.center = target.center
+        }
+        
+        let dropLineAnimation = {
+            // Scale and move
+            line.transform = CGAffineTransform.identity
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(secondsBeforeAnimation)) {
+            UIView.animate(withDuration: bigCircleAnimationSeconds, animations: moveAndScaleAnimation) { finished in
+                
+                _ = smallCircles.map({ smallCircle in
+                    let delaySeconds = Double(smallCircle.center.y / containerView.frame.height) * Double(dropLineAnimationSeconds)
+                    UIView.animate(withDuration: smallCircleAnimationSeconds, delay: delaySeconds, usingSpringWithDamping: 0.65, initialSpringVelocity: 2.0, options:[], animations: { smallCircle.transform = CGAffineTransform.identity }, completion: nil)
+                })
+                
+                UIView.animate(withDuration: dropLineAnimationSeconds, animations: dropLineAnimation) { finished in
+                    completionHandler()
+                }
+                
+            }
+        }
+    }
+    
+}
+
+extension UIView {
+    func addBackground(imageName: String = "Gradient Gray Background", contextMode: UIViewContentMode = .scaleToFill) {
+        // setup the UIImageView
+        let backgroundImageView = UIImageView(frame: UIScreen.main.bounds)
+        backgroundImageView.image = UIImage(named: imageName)
+        backgroundImageView.contentMode = contentMode
+        backgroundImageView.translatesAutoresizingMaskIntoConstraints = false
+        
+        addSubview(backgroundImageView)
+        sendSubview(toBack: backgroundImageView)
+        
+        // adding NSLayoutConstraints
+        let leadingConstraint = NSLayoutConstraint(item: backgroundImageView, attribute: .leading, relatedBy: .equal, toItem: self, attribute: .leading, multiplier: 1.0, constant: 0.0)
+        let trailingConstraint = NSLayoutConstraint(item: backgroundImageView, attribute: .trailing, relatedBy: .equal, toItem: self, attribute: .trailing, multiplier: 1.0, constant: 0.0)
+        let topConstraint = NSLayoutConstraint(item: backgroundImageView, attribute: .top, relatedBy: .equal, toItem: self, attribute: .top, multiplier: 1.0, constant: 0.0)
+        let bottomConstraint = NSLayoutConstraint(item: backgroundImageView, attribute: .bottom, relatedBy: .equal, toItem: self, attribute: .bottom, multiplier: 1.0, constant: 0.0)
+        
+        NSLayoutConstraint.activate([leadingConstraint, trailingConstraint, topConstraint, bottomConstraint])
+    }
 }

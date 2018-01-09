@@ -23,11 +23,6 @@ class TwitterUserTableViewController: UITableViewController {
         super.viewDidLoad()
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         swifter = appDelegate.swifter
-
-        // Just for testing...
-        let container: NSPersistentContainer? = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer
-        guard let context = container?.viewContext else { return }
-        deleteTweetsIfUserWantsTo(using: context)
     }
     
     // MARK: - Table view data source
@@ -57,9 +52,11 @@ class TwitterUserTableViewController: UITableViewController {
     
     @IBAction func testButtonPressed(_ sender: UIBarButtonItem) {
         //printTweetJSON()
+        
         let container: NSPersistentContainer? = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer
         guard let context = container?.viewContext else { return }
         deleteTweetsIfUserWantsTo(using: context)
+ 
     }
 
     func printTweetJSON() {

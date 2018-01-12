@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 class TweetImageTableViewCell: TweetTableViewCell, UIScrollViewDelegate {
 
@@ -41,31 +42,20 @@ class TweetImageTableViewCell: TweetTableViewCell, UIScrollViewDelegate {
             newImageView.contentMode = .scaleAspectFill
             scrollView.addSubview(newImageView)
             
-            // Also add an activity indicator to animate until the image is loaded
-            let newActivityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .gray)
-            newActivityIndicator.hidesWhenStopped = true
-            scrollView.addSubview(newActivityIndicator)
-            newActivityIndicator.center = newImageView.center
-            newActivityIndicator.startAnimating()
-            
             if let imageURL = tweetImages[imageNumber].imageURL {
-                let lastImageURL = imageURL
-                DispatchQueue.global(qos: .userInitiated).async {
-                    if let imageData = try? Data(contentsOf: URL(string: imageURL)!) {
-                        DispatchQueue.main.async {
-                            if imageURL == lastImageURL {
-                                newImageView.image = UIImage(data: imageData)
-                                newActivityIndicator.stopAnimating()
-                            }
-                        }
-                    } else {
-                        DispatchQueue.main.async {
-                            if imageURL == lastImageURL {
-                                newImageView.image = nil
-                            }
-                        }
-                    }
-                }
+                newImageView.kf.indicatorType = .activity
+                newImageView.kf.setImage(with: URL(string: imageURL))
+            }
+            
+        }
+    }
+
+    override func cancelUpdateUI() {
+        super.cancelUpdateUI()
+        for subview in scrollView.subviews {
+            // Clear out images from the last use of the cell
+            if let imageView = subview as? UIImageView {
+                imageView.kf.cancelDownloadTask()
             }
         }
     }

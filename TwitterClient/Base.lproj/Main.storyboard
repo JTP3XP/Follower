@@ -393,12 +393,8 @@
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="nSH-pe-5so">
-                                            <rect key="frame" x="205" y="146" width="20" height="20"/>
-                                        </activityIndicatorView>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstItem="nSH-pe-5so" firstAttribute="centerX" secondItem="h9t-BB-KCS" secondAttribute="centerX" id="01d-fL-9BJ"/>
                                         <constraint firstItem="rWY-Ks-Yuj" firstAttribute="top" secondItem="J2c-VL-ceI" secondAttribute="top" constant="8" id="0e8-U0-csh"/>
                                         <constraint firstItem="1Ef-Pw-z36" firstAttribute="width" relation="lessThanOrEqual" secondItem="rWY-Ks-Yuj" secondAttribute="width" id="8Gh-L8-JFf"/>
                                         <constraint firstItem="BpS-x3-8OR" firstAttribute="top" secondItem="h9t-BB-KCS" secondAttribute="bottom" constant="2" id="8uw-rn-xUH"/>
@@ -417,7 +413,6 @@
                                         <constraint firstItem="vHG-Ty-Ywy" firstAttribute="leading" secondItem="rWY-Ks-Yuj" secondAttribute="trailing" constant="8" id="kKd-mU-PNC"/>
                                         <constraint firstItem="BpS-x3-8OR" firstAttribute="trailing" secondItem="h9t-BB-KCS" secondAttribute="trailing" id="kfy-Zl-OGd"/>
                                         <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="1Ef-Pw-z36" secondAttribute="bottom" constant="8" id="lq0-B2-pcF"/>
-                                        <constraint firstItem="nSH-pe-5so" firstAttribute="centerY" secondItem="h9t-BB-KCS" secondAttribute="centerY" id="pMG-dN-Gqu"/>
                                         <constraint firstItem="07q-VP-9EW" firstAttribute="leading" secondItem="BpS-x3-8OR" secondAttribute="leading" id="qEM-tg-16v"/>
                                         <constraint firstItem="h9t-BB-KCS" firstAttribute="trailing" secondItem="ArM-Qh-FnY" secondAttribute="trailing" id="rW5-gn-9Ba"/>
                                         <constraint firstItem="07q-VP-9EW" firstAttribute="top" secondItem="BpS-x3-8OR" secondAttribute="bottom" constant="1" id="tYv-WO-c51"/>
@@ -431,7 +426,6 @@
                                 </tableViewCellContentView>
                                 <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <connections>
-                                    <outlet property="CardImageLoadingIndicator" destination="nSH-pe-5so" id="xVb-H9-Qif"/>
                                     <outlet property="cardImageView" destination="h9t-BB-KCS" id="XKe-xp-Zgk"/>
                                     <outlet property="cardSubtitleLabel" destination="07q-VP-9EW" id="Ytj-DM-d2G"/>
                                     <outlet property="cardTitleLabel" destination="BpS-x3-8OR" id="qd2-7T-rZU"/>
@@ -499,9 +493,6 @@
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="bgz-q8-nNz">
-                                            <rect key="frame" x="80" y="97" width="20" height="20"/>
-                                        </activityIndicatorView>
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="mNe-j5-Kff" firstAttribute="trailing" relation="lessThanOrEqual" secondItem="Tbc-A7-iqd" secondAttribute="trailing" id="0wc-Ya-xD6"/>
@@ -513,8 +504,6 @@
                                         <constraint firstItem="lX4-R6-2kv" firstAttribute="width" relation="lessThanOrEqual" secondItem="anr-Dv-Gbv" secondAttribute="width" id="IUv-h7-Scb"/>
                                         <constraint firstItem="anr-Dv-Gbv" firstAttribute="leading" secondItem="8rP-rW-k7X" secondAttribute="leading" constant="8" id="Iyb-YI-PfW"/>
                                         <constraint firstItem="WdT-u4-if0" firstAttribute="width" relation="lessThanOrEqual" secondItem="Tbc-A7-iqd" secondAttribute="width" multiplier="0.6" id="Mgo-0h-vUC"/>
-                                        <constraint firstItem="bgz-q8-nNz" firstAttribute="centerX" secondItem="mNe-j5-Kff" secondAttribute="centerX" id="OBr-xV-VPv"/>
-                                        <constraint firstItem="bgz-q8-nNz" firstAttribute="centerY" secondItem="mNe-j5-Kff" secondAttribute="centerY" id="PaZ-Pa-nJd"/>
                                         <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="lX4-R6-2kv" secondAttribute="bottom" constant="8" id="RR1-Iy-cqB"/>
                                         <constraint firstItem="mNe-j5-Kff" firstAttribute="leading" secondItem="Tbc-A7-iqd" secondAttribute="leading" id="T81-ZW-Aeg"/>
                                         <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="WdT-u4-if0" secondAttribute="trailing" constant="8" id="TPB-gX-huX"/>
@@ -537,7 +526,6 @@
                                 </tableViewCellContentView>
                                 <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <connections>
-                                    <outlet property="CardImageLoadingIndicator" destination="bgz-q8-nNz" id="NSJ-IT-TAH"/>
                                     <outlet property="cardImageView" destination="mNe-j5-Kff" id="l3M-4L-rtq"/>
                                     <outlet property="cardSubtitleLabel" destination="qIl-pw-9JP" id="Grr-xj-wUY"/>
                                     <outlet property="cardTitleLabel" destination="fDr-XP-GHq" id="BKu-XY-qnx"/>

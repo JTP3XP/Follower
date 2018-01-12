@@ -9,6 +9,7 @@
 import UIKit
 import SwifteriOS
 import SafariServices
+import Kingfisher
 
 class ThreadedTweetTableViewController: UITableViewController, TweetTableViewCellDelegate {
 
@@ -105,6 +106,12 @@ class ThreadedTweetTableViewController: UITableViewController, TweetTableViewCel
             print("End of tweet")
         case .action(let action):
             print("\(action.text)")
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if let tweetCell = cell as? TweetTableViewCell {
+            tweetCell.cancelUpdateUI()
         }
     }
  

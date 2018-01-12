@@ -10,6 +10,7 @@ import UIKit
 import SwifteriOS
 import Foundation
 import CoreData
+import Kingfisher
 
 class TweetTableViewCell: UITableViewCell {
 
@@ -38,23 +39,12 @@ class TweetTableViewCell: UITableViewCell {
         // Set profile picture
         profileImageView.image = nil
         if let profileImageURL = tweet.tweeter!.profileImageURL {
-            let lastProfileImageURL = profileImageURL // store the URL so we can check if it is still the same before we update UI on main thread
-            DispatchQueue.global(qos: .userInitiated).async {
-                if let imageData = try? Data(contentsOf: URL(string: profileImageURL)!) {
-                    DispatchQueue.main.async { [weak self] in
-                        if profileImageURL == lastProfileImageURL { // make sure we aren't coming back to a cell that got reused for another tweet before displaying result
-                            self?.profileImageView?.image = UIImage(data: imageData)
-                        }
-                    }
-                } else {
-                    DispatchQueue.main.async { [weak self] in
-                        if profileImageURL == lastProfileImageURL {
-                            self?.profileImageView?.image = nil
-                        }
-                    }
-                }
-            }
+            profileImageView.kf.setImage(with: URL(string: profileImageURL))
         }
+    }
+    
+    func cancelUpdateUI() {
+        profileImageView.kf.cancelDownloadTask()
     }
     
     // MARK: Lifecycle methods

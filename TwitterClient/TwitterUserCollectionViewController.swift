@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import Kingfisher
 
 private let reuseIdentifier = "Twitter User Cell"
 
@@ -26,6 +27,7 @@ class TwitterUserCollectionViewController: UICollectionViewController, UICollect
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        collectionView?.prefetchDataSource = self
         
         guard let flowLayout = collectionView?.collectionViewLayout as? UICollectionViewFlowLayout else { return }
         flowLayout.minimumInteritemSpacing = margin
@@ -100,4 +102,11 @@ class TwitterUserCollectionViewController: UICollectionViewController, UICollect
         present(deleteAlert, animated: true, completion: nil)
     }
 
+}
+
+extension TwitterUserCollectionViewController: UICollectionViewDataSourcePrefetching {
+    func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
+        let urls = indexPaths.flatMap { URL(string: displayedUsers[$0.row].profileImageURL ?? "") }
+        ImagePrefetcher(urls: urls).start()
+    }
 }

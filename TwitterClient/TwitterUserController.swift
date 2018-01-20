@@ -68,7 +68,7 @@ class TwitterUserController {
         })
     }
     
-    func getMyFollowedUsers() -> [TwitterUser] {
+    func getMyFollowedUsers(sortedBy sortClosure: ((TwitterUser, TwitterUser) -> Bool)? = nil) -> [TwitterUser] {
         var databaseFollowedUsers = [TwitterUser]()
         let request: NSFetchRequest<TwitterUser> = TwitterUser.fetchRequest()
         request.predicate = NSPredicate(format: "isFollowed = true")
@@ -77,6 +77,11 @@ class TwitterUserController {
         } catch {
             print("Error getting followed users from database")
         }
+        
+        if let sortClosure = sortClosure {
+            databaseFollowedUsers.sort(by: sortClosure)
+        }
+        
         return databaseFollowedUsers
     }
     

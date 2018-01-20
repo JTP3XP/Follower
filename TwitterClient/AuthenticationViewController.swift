@@ -115,7 +115,9 @@ class AuthenticationViewController: UIViewController, SFSafariViewControllerDele
         if segue.identifier == "LoginSuccess2" {
             if let twitterUserCollectionViewController = segue.destination.contents as? TwitterUserCollectionViewController {
                 let twitterUserController = TwitterUserController()
-                twitterUserCollectionViewController.displayedUsers = twitterUserController.getMyFollowedUsers()
+                // TODO: Enhance sorting to be more helpful
+                let sortClosure: (TwitterUser, TwitterUser) -> Bool = { return $0.fullName!.uppercased() < $1.fullName!.uppercased() }
+                twitterUserCollectionViewController.displayedUsers = twitterUserController.getMyFollowedUsers(sortedBy: sortClosure)
             }
         }
     }

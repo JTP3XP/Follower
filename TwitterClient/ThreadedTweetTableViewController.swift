@@ -119,6 +119,7 @@ class ThreadedTweetTableViewController: UITableViewController, TweetTableViewCel
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        tableView.prefetchDataSource = self
         
         if let tableTitle = navigationBarTitle {
             titleNavigationItem.title = tableTitle
@@ -130,6 +131,7 @@ class ThreadedTweetTableViewController: UITableViewController, TweetTableViewCel
         refreshControl?.addTarget(self, action: #selector(refresh), for: .valueChanged)
         
         threadedTweetTableContents = generateTableContents()
+        
     }
     
     // MARK: - Convenience Functions
@@ -155,4 +157,30 @@ class ThreadedTweetTableViewController: UITableViewController, TweetTableViewCel
         return tableContents
     }
     
+}
+
+extension ThreadedTweetTableViewController: UITableViewDataSourcePrefetching {
+    func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
+        var urls = [URL]()
+        
+        for indexPath in indexPaths {
+            if case .tweet(let tweet) = threadedTweetTableContents[indexPath.section][indexPath.row] {
+                if let cardURLString = tweet.card?.imageURL, let cardURL = URL(string: cardURLString) {
+                    urls.append(cardURL)
+                }
+                if let profileImageURLString = tweet.tweeter?.profileImageURL, let profileImageURL = URL(string: profileImageURLString) {
+                    urls.append(profileImageURL)
+                }
+                if let tweetImages = tweet.images?.allObjects as? [TweetImage] {
+                    for tweetImage in tweetImages {
+                        if let imageURLString = tweetImage.imageURL, let imageURL = URL(string: imageURLString) {
+                            urls.append(imageURL)
+                        }
+                    }
+                }
+            }
+        }
+        
+        ImagePrefetcher(urls: urls).start()
+    }
 }

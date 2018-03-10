@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		20BA94B8834C8BE813F11FF9 /* Pods_TwitterClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9991B88551A6B21C527D0BC6 /* Pods_TwitterClient.framework */; };
+		5229110C20199B4200B3B50E /* DesignableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5229110B20199B4200B3B50E /* DesignableView.swift */; };
 		523177FC1F91C4DE00EC4303 /* TweetURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523177FB1F91C4DE00EC4303 /* TweetURL.swift */; };
 		523177FE1F97015C00EC4303 /* TweetCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523177FD1F97015C00EC4303 /* TweetCard.swift */; };
 		523178001F9709F700EC4303 /* TweetCardBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523177FF1F9709F700EC4303 /* TweetCardBuilder.swift */; };
@@ -53,6 +54,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		5229110B20199B4200B3B50E /* DesignableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignableView.swift; sourceTree = "<group>"; };
 		523177FB1F91C4DE00EC4303 /* TweetURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TweetURL.swift; sourceTree = "<group>"; };
 		523177FD1F97015C00EC4303 /* TweetCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TweetCard.swift; sourceTree = "<group>"; };
 		523177FF1F9709F700EC4303 /* TweetCardBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TweetCardBuilder.swift; sourceTree = "<group>"; };
@@ -134,6 +136,7 @@
 				523177FF1F9709F700EC4303 /* TweetCardBuilder.swift */,
 				52D6BEEE1FC533F600E93B66 /* TwitterUserController.swift */,
 				523507411FC7DA88005C58E2 /* TwitterTimelineController.swift */,
+				5229110B20199B4200B3B50E /* DesignableView.swift */,
 				52D6BEEB1FBFE50800E93B66 /* CollectionViewCells */,
 				52D6BEC61FB6B0F000E93B66 /* TableViewCells */,
 				52A1CE601F6F3C9B00581FD1 /* Data Types */,
@@ -318,10 +321,12 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-TwitterClient/Pods-TwitterClient-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/GSImageViewerController/GSImageViewerController.framework",
 				"${BUILT_PRODUCTS_DIR}/Kingfisher/Kingfisher.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GSImageViewerController.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Kingfisher.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -362,6 +367,7 @@
 				52A1CE5D1F6F3C2600581FD1 /* UserMention.swift in Sources */,
 				523177FC1F91C4DE00EC4303 /* TweetURL.swift in Sources */,
 				527FFC2D1EFA1F1200B76881 /* TweetThreader.swift in Sources */,
+				5229110C20199B4200B3B50E /* DesignableView.swift in Sources */,
 				523177FE1F97015C00EC4303 /* TweetCard.swift in Sources */,
 				525454D01EF4DF8F00A47EFE /* TwitterClient.xcdatamodeld in Sources */,
 				523178001F9709F700EC4303 /* TweetCardBuilder.swift in Sources */,

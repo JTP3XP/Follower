@@ -10,6 +10,7 @@ import UIKit
 import SwifteriOS
 import SafariServices
 import Kingfisher
+import GSImageViewerController
 
 class ThreadedTweetTableViewController: UITableViewController, TweetTableViewCellDelegate {
 
@@ -143,18 +144,30 @@ class ThreadedTweetTableViewController: UITableViewController, TweetTableViewCel
         for threadedTweet in threadedTweets {
             var sectionContents = [TweetTableContents]()
             for tweet in threadedTweet{
-                if tweet.isARetweet {
-                    // add an action before a retweet since actions are their own row in the table
-                    let retweetAction = TweetTableContents.action(("\(tweet.tweeter!.fullName!) retweeted:",(tweet.date! as Date)))
-                    sectionContents.append(retweetAction)
-                    sectionContents.append(TweetTableContents.tweet(tweet.isARetweetOf!)) // add the original tweet instead of the retweet
-                } else {
-                    sectionContents.append(TweetTableContents.tweet(tweet))
-                }
+                sectionContents = sectionContentsAfterAppending(tweet: tweet, to: sectionContents)
             }
             tableContents.append(sectionContents)
         }
         return tableContents
+    }
+    
+    // This needs to be a recursive function so we can properly arrange retweets of quoted tweets (also quotes of quoted tweets if that is possible)
+    private func sectionContentsAfterAppending(tweet: Tweet, to sectionContents: [TweetTableContents]) -> [TweetTableContents] {
+        var resultSectionContents = sectionContents
+        if tweet.isARetweet {
+            // add an action before a retweet since actions are their own row in the table
+            let retweetAction = TweetTableContents.action(("\(tweet.tweeter!.fullName!) retweeted:",(tweet.date! as Date)))
+            resultSectionContents.append(retweetAction)
+            resultSectionContents = sectionContentsAfterAppending(tweet: tweet.isARetweetOf!, to: resultSectionContents) // add the original tweet instead of the retweet
+        } else if tweet.isAQuote {
+            let quoteAction = TweetTableContents.action(("\(tweet.tweeter!.fullName!) quoted:",(tweet.date! as Date)))
+            resultSectionContents.append(quoteAction)
+            resultSectionContents = sectionContentsAfterAppending(tweet: tweet.isAQuoteOf!, to: resultSectionContents) // Put the quoted tweet first so it reads chronologically
+            resultSectionContents.append(TweetTableContents.tweet(tweet))
+        } else {
+            resultSectionContents.append(TweetTableContents.tweet(tweet))
+        }
+        return resultSectionContents
     }
     
 }
@@ -183,4 +196,15 @@ extension ThreadedTweetTableViewController: UITableViewDataSourcePrefetching {
         
         ImagePrefetcher(urls: urls).start()
     }
+}
+
+extension ThreadedTweetTableViewController {
+    
+    func present(image: UIImage, from view: UIView) {
+        let imageInfo   = GSImageInfo(image: image, imageMode: .aspectFit)
+        let transitionInfo = GSTransitionInfo(fromView: view)
+        let imageViewer = GSImageViewerController(imageInfo: imageInfo, transitionInfo: transitionInfo)
+        present(imageViewer, animated: true, completion: nil)
+    }
+
 }

@@ -35,7 +35,7 @@ class TweetCardBuilder {
                 let htmlString = String(data: data!, encoding: String.Encoding.utf8) ?? "Couldn't get string"
                 let metaData = htmlString.extractMetaData()
                 
-                if let cardType = metaData["twitter:card"], let cardTitle = metaData["twitter:title"]?.htmlDecoded ?? metaData["og:title"] {
+                if let cardType = metaData["twitter:card"], let cardTitle = metaData["twitter:title"] ?? metaData["og:title"] {
                     var cardImageURL: String?
                     
                     if let htmlCardImageURL = metaData["twitter:image"] ?? metaData["og:image"] {
@@ -46,7 +46,7 @@ class TweetCardBuilder {
                     }
                     
                     if cardImageURL != nil {
-                        completionHandler((cardType: cardType, cardTitle: cardTitle, cardImageURL: cardImageURL!, relatedTweetURL: tweetUrls.last!))
+                        completionHandler((cardType: cardType, cardTitle: cardTitle.htmlDecoded, cardImageURL: cardImageURL!, relatedTweetURL: tweetUrls.last!))
                     } else {
                         completionHandler(nil)
                     }

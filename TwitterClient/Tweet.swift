@@ -79,10 +79,10 @@ class Tweet: NSManagedObject {
         
         // Check if it is a quote
         let quotedStatus = tweetJSON["quoted_status"]
-        if quotedStatus != .invalid && quotedStatus != .null {
+        if let isQuoteStatus = tweetJSON["is_quote_status"].bool, isQuoteStatus == true && quotedStatus != .invalid && quotedStatus != .null {
             tweet.isAQuote = true
             do {
-                try tweet.isAQuoteOf = findOrCreateTweet(matching: retweetedStatus, in: context)
+                try tweet.isAQuoteOf = findOrCreateTweet(matching: quotedStatus, in: context)
             } catch {
                 tweet.isAQuote = false
             }

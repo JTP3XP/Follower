@@ -3,8 +3,9 @@ workspace 'TwitterClient'
 
 target 'TwitterClient' do
   use_frameworks!
-  xcodeproj 'TwitterClient.xcodeproj'
+  project 'TwitterClient.xcodeproj'
 
   # Pods for TwitterClient
   pod 'Kingfisher', '~> 4.0'
+  pod 'GSImageViewerController', '~> 1.4'
 end

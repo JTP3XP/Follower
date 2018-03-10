@@ -47,6 +47,10 @@ class TweetImageTableViewCell: TweetTableViewCell, UIScrollViewDelegate {
                 newImageView.kf.setImage(with: URL(string: imageURL))
             }
             
+            // Add a tap gesture recognizer so we can present the image if tapped
+            let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageTapped(sender:)))
+            newImageView.addGestureRecognizer(tapRecognizer)
+            newImageView.isUserInteractionEnabled = true
         }
     }
 
@@ -68,4 +72,22 @@ class TweetImageTableViewCell: TweetTableViewCell, UIScrollViewDelegate {
         self.pageControl.currentPage = Int(currentPage)
     }
     
+    @objc func imageTapped(sender: UITapGestureRecognizer) {
+        if let delegate = self.delegate {
+            if let senderImageView = sender.view as? UIImageView, let senderImage = senderImageView.image {
+                delegate.imageInCellWasTapped(image: senderImage, tappedView: senderImageView)
+            }
+        }
+    }
+    
+}
+
+extension TweetTableViewCellDelegate {
+    func imageInCellWasTapped(image: UIImage, tappedView: UIImageView) {
+        if let presentingViewController = self as? ThreadedTweetTableViewController {
+            presentingViewController.present(image: image, from: tappedView)
+        } else {
+            print("Tried to present image using something other than a ThreadedTweetTableViewController")
+        }
+    }
 }

@@ -5,24 +5,6 @@
 //  Created by John Patton on 6/17/17.
 //  Copyright © 2017 JohnPattonXP.
 //
-//  Permission is hereby granted, free of charge, to any person obtaining a copy
-//  of this software and associated documentation files (the "Software"), to deal
-//  in the Software without restriction, including without limitation the rights
-//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-//  copies of the Software, and to permit persons to whom the Software is
-//  furnished to do so, subject to the following conditions:
-//
-//  The above copyright notice and this permission notice shall be included in
-//  all copies or substantial portions of the Software.
-//
-//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-//  THE SOFTWARE.
-//
 
 import UIKit
 import Accounts
@@ -36,29 +18,62 @@ class AuthenticationViewController: UIViewController, SFSafariViewControllerDele
     var swifter: Swifter!
     var authorizedToken: Credential.OAuthAccessToken?
     @IBOutlet weak var loginButton: UIButton!
+    @IBOutlet weak var backgroundImageView: UIImageView!
     
     private struct API {
         static let key : String = "cpB8erNVGtNs3d089Mq7yGEa2"
         static let secret : String = "R2fc5uuuwnQ20JdiGYNYLnjMvT93Q7PpLll3muKCdiYEOnQPyI"
     }
     
+    private struct loginScreen {
+        var backgroundImage: UIImage {
+            var backgroundImageName = ""
+            switch UIScreen.main.bounds.height {
+            case 568:
+                backgroundImageName = "4 inch Login Screen"
+            case 667:
+                backgroundImageName = "4.7 inch Login Screen"
+            case 736:
+                backgroundImageName = "5.5 inch Login Screen"
+            case 812:
+                backgroundImageName = "5.8 inch Login Screen"
+            default:
+                break
+            }
+            return UIImage(named: backgroundImageName)!
+        }
+        
+        var loginButtonRect: CGRect {
+            var buttonRect = CGRect()
+            switch UIScreen.main.bounds.height {
+            case 568:
+                buttonRect = CGRect(x: 19, y: 499, width: 283, height: 40)
+            case 667:
+                buttonRect = CGRect(x: 23, y: 592, width: 329, height: 47)
+            case 736:
+                buttonRect = CGRect(x: 28, y: 648, width: 359, height: 51)
+            case 812:
+                buttonRect = CGRect(x: 23, y: 678, width: 329, height: 47)
+            default:
+                break
+            }
+            return buttonRect
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         swifter = appDelegate.swifter
+        let thisLoginScreen = loginScreen()
+        
+        backgroundImageView.image = thisLoginScreen.backgroundImage
+        loginButton.frame = thisLoginScreen.loginButtonRect
+        loginButton.isHidden = false
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        drawAndAnimateLoginScreen() { [weak self] in
-            if let _ = UserDefaults.standard.array(forKey: "token") {
-                self?.login()
-            } else {
-                if let loginButton = self?.loginButton {
-                    self?.view.bringSubview(toFront: loginButton)
-                }
-            }
-        }
     }
     
     @IBAction func didTouchUpInsideLoginButton(_ sender: UIButton) {
@@ -132,8 +147,7 @@ class AuthenticationViewController: UIViewController, SFSafariViewControllerDele
     func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
         controller.dismiss(animated: true, completion: nil)
     }
-    
-    
+
 }
 
 // MARK:- Extensions
@@ -147,109 +161,6 @@ extension UIViewController {
             return self
         }
     }
-}
-
-extension UIViewController {
-    
-    func drawAndAnimateLoginScreen(completionHandler: @escaping (() -> Void)) {
-        let containerView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: 375.0, height: 667.0))
-        containerView.addBackground()
-        self.view.addSubview(containerView)
-        
-        let twitterBlue = UIColor(red: 29/255, green: 161/255, blue: 242/255, alpha: 1)
-        
-        let bigCircleRadius: CGFloat = 145/2
-        let smallCircleRadius: CGFloat = bigCircleRadius/2
-        let pointsToLeftOfBigCircle: CGFloat = 14
-        let pointsAboveBigCircle: CGFloat = 35 + (containerView.frame.height >= 812 ? 30 : 0)
-        let verticalLineCenter: CGFloat = pointsToLeftOfBigCircle + bigCircleRadius
-        let verticalLineWidth: CGFloat = 8
-        let distanceBetweenCircles: CGFloat = 34
-        
-        // Big circle
-        let circle = UIButton(frame:  CGRect(x: 0.0, y: 0.0, width: 300.0, height: 300.0))
-        circle.center = containerView.center
-        circle.layer.cornerRadius = circle.frame.width / 2
-        circle.titleLabel?.text = "Follower"
-        let attributes: [NSAttributedStringKey: Any] = [
-            NSAttributedStringKey.font: UIFont(name: "AmericanTypewriter-Semibold", size: 52)!,
-            NSAttributedStringKey.foregroundColor: UIColor.white
-        ]
-        let title = NSAttributedString(string: "Follower", attributes: attributes)
-        circle.setAttributedTitle(title, for: .normal)
-        circle.backgroundColor = twitterBlue
-        
-        // Set target location for big circle
-        let target = UIView(frame: CGRect(x: 0.0, y: 0.0, width: bigCircleRadius * 2, height: bigCircleRadius * 2))
-        target.center = CGPoint(x: verticalLineCenter, y: pointsAboveBigCircle + bigCircleRadius)
-        target.layer.cornerRadius = target.frame.width / 2
-        target.backgroundColor = .clear
-        //target.layer.borderWidth = 2.0
-        
-        // Vertical line
-        let line = UIView(frame: CGRect(x: verticalLineCenter - verticalLineWidth/2, y: 0, width: verticalLineWidth, height: containerView.frame.height))
-        line.backgroundColor = twitterBlue
-        line.transform = CGAffineTransform.init(translationX: 0, y: -containerView.frame.height)
-        
-        // Smaller Circles
-        let firstSmallCircleCenterY: CGFloat = target.center.y + bigCircleRadius + smallCircleRadius + distanceBetweenCircles
-        var smallCircles = [UIView]()
-        var topOfNextCircle: CGFloat = firstSmallCircleCenterY - smallCircleRadius
-        var circleIndex = 0
-        while topOfNextCircle < containerView.frame.height {
-            let newCircleCenterY: CGFloat = firstSmallCircleCenterY + CGFloat(circleIndex) * (smallCircleRadius + distanceBetweenCircles + smallCircleRadius)
-            let newCircle = UIView(frame: CGRect(x: 0, y: 0, width: smallCircleRadius * 2, height: smallCircleRadius * 2))
-            newCircle.center = CGPoint(x: verticalLineCenter, y: newCircleCenterY)
-            newCircle.layer.cornerRadius = newCircle.frame.width / 2
-            newCircle.backgroundColor = twitterBlue
-            newCircle.transform = CGAffineTransform.init(scaleX: 0, y: 0)
-            
-            smallCircles.append(newCircle)
-            
-            // Calculate condition for while loop
-            topOfNextCircle = newCircleCenterY + smallCircleRadius + distanceBetweenCircles
-            circleIndex = circleIndex + 1
-        }
-        
-        containerView.addSubview(target)
-        containerView.addSubview(line)
-        containerView.addSubview(circle)
-        _ = smallCircles.map({ containerView.addSubview($0) })
-        
-        let secondsBeforeAnimation = 1
-        let bigCircleAnimationSeconds: TimeInterval = 1.0
-        let dropLineAnimationSeconds: TimeInterval = 1.0
-        let smallCircleAnimationSeconds: TimeInterval = 0.5
-        
-        let moveAndScaleAnimation = {
-            // Scale and move
-            let scaleValue: CGFloat = target.frame.width / circle.frame.width
-            let scale = CGAffineTransform(scaleX: scaleValue, y: scaleValue)
-            circle.transform = scale
-            circle.center = target.center
-        }
-        
-        let dropLineAnimation = {
-            // Scale and move
-            line.transform = CGAffineTransform.identity
-        }
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(secondsBeforeAnimation)) {
-            UIView.animate(withDuration: bigCircleAnimationSeconds, animations: moveAndScaleAnimation) { finished in
-                
-                _ = smallCircles.map({ smallCircle in
-                    let delaySeconds = Double(smallCircle.center.y / containerView.frame.height) * Double(dropLineAnimationSeconds)
-                    UIView.animate(withDuration: smallCircleAnimationSeconds, delay: delaySeconds, usingSpringWithDamping: 0.65, initialSpringVelocity: 2.0, options:[], animations: { smallCircle.transform = CGAffineTransform.identity }, completion: nil)
-                })
-                
-                UIView.animate(withDuration: dropLineAnimationSeconds, animations: dropLineAnimation) { finished in
-                    completionHandler()
-                }
-                
-            }
-        }
-    }
-    
 }
 
 extension UIView {

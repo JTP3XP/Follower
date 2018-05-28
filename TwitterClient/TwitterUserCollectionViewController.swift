@@ -16,7 +16,7 @@ class TwitterUserCollectionViewController: UICollectionViewController, UICollect
 
     var displayedUsers = [TwitterUser]()
     
-    let margin: CGFloat = 10
+    let margin: CGFloat = 5
     let cellsPerRow = 2
     
     @IBAction func testButtonPressed(_ sender: UIBarButtonItem) {
@@ -33,6 +33,15 @@ class TwitterUserCollectionViewController: UICollectionViewController, UICollect
         flowLayout.minimumInteritemSpacing = margin
         flowLayout.minimumLineSpacing = margin
         flowLayout.sectionInset = UIEdgeInsets(top: margin, left: margin, bottom: margin, right: margin)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        // The user may have read tweets and then returned back to this view, so update the UI to pick up any changes in unread status
+        for cell in collectionView!.visibleCells as! [TwitterUserCollectionViewCell] {
+            cell.updateUI()
+        }
     }
     
     // MARK: - Navigation

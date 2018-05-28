@@ -93,6 +93,20 @@ class Tweet: NSManagedObject {
         // Get user
         tweet.tweeter = try? TwitterUser.findOrCreateTwitterUser(matching: tweetJSON["user"], in: context)
         
+        if let tweeter = tweet.tweeter {
+            // This will not be nil for the followed users beacuse of the way we record this when loading the followed users, and we do not care to log this for anyone else because this is just used to indicate unread tweets from followed users
+            if let timestampToUpdate = tweeter.mostRecentTweetTimestamp, let dateToCompare = tweet.date, timestampToUpdate < dateToCompare {
+                tweeter.mostRecentTweetTimestamp = tweet.date
+            }
+            
+            // We only add tweets to the database when they are being loaded for display, so we always count them as read here. May need to reconsider if tweets start getting loaded for other reasons.
+            if tweeter.mostRecentReadTweetTimestamp == nil {
+                tweeter.mostRecentReadTweetTimestamp = tweet.date
+            } else if let timestampToUpdate = tweeter.mostRecentReadTweetTimestamp, let dateToCompare = tweet.date, timestampToUpdate < dateToCompare {
+                tweeter.mostRecentReadTweetTimestamp = tweet.date
+            }
+        }
+        
         // Get entities
         if let urlJSONArray = tweetJSON["entities"]["urls"].array {
             for urlJSON in urlJSONArray {

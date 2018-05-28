@@ -39,28 +39,25 @@ class TwitterUserController {
                 var twitterUserArray = [TwitterUser]()
                 self.swifter.lookupUsers(for: usersArray, success: { (json) in
                     guard let twitterUserJSONArray = json.array else { return }
-                    var databaseChangeWasMade = false
+
                     for twitterUserJSON in twitterUserJSONArray {
                         do {
                             let followedUser = try TwitterUser.findOrCreateTwitterUser(matching: twitterUserJSON, in: self.context)
                             twitterUserArray.append(followedUser)
                             if followedUser.isFollowed == false {
                                 followedUser.isFollowed = true
-                                databaseChangeWasMade = true
                             }
                         } catch {
                             print("Error getting followed user")
                         }
                     }
-                    
-                    if databaseChangeWasMade {
-                        do {
-                            try self.context.save()
-                        } catch {
-                            fatalError("Failure to save context: \(error)")
-                        }
+
+                    do {
+                        try self.context.save()
+                    } catch {
+                        fatalError("Failure to save context: \(error)")
                     }
-                    
+
                     completionHandler(twitterUserArray)
                     
                 }, failure: { _ in })

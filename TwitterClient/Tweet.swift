@@ -91,7 +91,11 @@ class Tweet: NSManagedObject {
         }
         
         // Get user
-        tweet.tweeter = try? TwitterUser.findOrCreateTwitterUser(matching: tweetJSON["user"], in: context)
+        do {
+            tweet.tweeter = try TwitterUser.findOrCreateTwitterUser(matching: tweetJSON["user"], in: context)
+        } catch {
+            print("Error finding or creating tweeter for tweet: \(error)")
+        }
         
         if let tweeter = tweet.tweeter {
             // This will not be nil for the followed users beacuse of the way we record this when loading the followed users, and we do not care to log this for anyone else because this is just used to indicate unread tweets from followed users

@@ -16,6 +16,7 @@ class TwitterTimelineController {
     var swifter: Swifter
     var context: NSManagedObjectContext
     var tweetsPerFetch = 20
+    var maxTweetID: String?
     
     init() {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
@@ -27,7 +28,7 @@ class TwitterTimelineController {
     
     func fetchThreadedTimeline(forUserID userID: String, completionHandler: @escaping ([[Tweet]]) -> ()) {
         
-        self.swifter.getTimeline(for: userID, count: tweetsPerFetch, tweetMode: TweetMode.extended, success: { json in
+        self.swifter.getTimeline(for: userID, count: tweetsPerFetch, maxID: maxTweetID, tweetMode: TweetMode.extended, success: { json in
             
             guard let tweetsJSON = json.array else { return }
             

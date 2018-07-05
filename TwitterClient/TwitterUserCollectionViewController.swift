@@ -115,7 +115,7 @@ class TwitterUserCollectionViewController: UICollectionViewController, UICollect
 
 extension TwitterUserCollectionViewController: UICollectionViewDataSourcePrefetching {
     func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
-        let urls = indexPaths.flatMap { URL(string: displayedUsers[$0.row].profileImageURL ?? "") }
+        let urls = indexPaths.compactMap { URL(string: displayedUsers[$0.row].profileImageURL ?? "") }
         ImagePrefetcher(urls: urls).start()
     }
 }

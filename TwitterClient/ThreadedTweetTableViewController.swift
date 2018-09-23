@@ -24,7 +24,7 @@ class ThreadedTweetTableViewController: UITableViewController, TweetTableViewCel
         case tweet(Tweet)
     }
     
-    private var lastTableElementIndex: (section: Int, row: Int) = (0, 0) // Storing as a variable lets us skip doing this count in the willDisplay:forRowAt method
+    internal var lastTableElementIndex: (section: Int, row: Int) = (0, 0) // Storing as a variable lets us skip doing this count in the willDisplay:forRowAt method
     private var threadedTweetTableContents = [[TweetTableContents]]() {
         didSet {
             lastTableElementIndex = (threadedTweetTableContents.count - 1, threadedTweetTableContents[threadedTweetTableContents.count - 1].count - 1)
@@ -120,32 +120,6 @@ class ThreadedTweetTableViewController: UITableViewController, TweetTableViewCel
             tweetCell.cancelUpdateUI()
         }
     }
-    
-    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        // Assuming that the last row in the table is for a tweet by the user we want to fetch more tweets for
-        if (indexPath.section, indexPath.row) == lastTableElementIndex {
-            if let tweetCell = cell as? TweetTableViewCell, let tweetID = tweetCell.tweet?.id, let tweetUserID = tweetCell.tweet?.tweeter?.userID {
-                // We need to fetch more from Twitter
-                let twitterTimelineController = TwitterTimelineController()
-                
-                guard let tweetIDInt = Int(tweetID) else { return }
-                twitterTimelineController.maxTweetID = "\(tweetIDInt - 1)" // Substracting 1 avoids refetching the last tweet shown
-                twitterTimelineController.fetchThreadedTimeline(forUserID: tweetUserID) { [weak self] (threadedTimelineTweets) in
-                    
-                    if let existingThreadedTweets = self?.threadedTweets {
-                        let existingWithNewThreadedTweets = existingThreadedTweets + threadedTimelineTweets
-                        let updatedThreadedTweets = TweetThreader.removeRedundantThreads(from: existingWithNewThreadedTweets)
-                        
-                        self?.threadedTweets = updatedThreadedTweets
-                        // Now reload the table view
-                        self?.loadTable()
-                        self?.tableView.reloadData()
-                        
-                    }
-                }
-            }
-        }
-    }
  
     // MARK: - View Controller Lifecycle
     
@@ -168,7 +142,7 @@ class ThreadedTweetTableViewController: UITableViewController, TweetTableViewCel
     
     // MARK:- Data Loading
     
-    private func loadTable() {
+    internal func loadTable() {
         threadedTweetTableContents = generateTableContents()
     }
     

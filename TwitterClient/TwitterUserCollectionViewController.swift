@@ -19,6 +19,8 @@ class TwitterUserCollectionViewController: UICollectionViewController, UICollect
     let margin: CGFloat = 5
     let cellsPerRow = 2
     
+    private var loadingView: UIAlertController?
+    
     @IBAction func testButtonPressed(_ sender: UIBarButtonItem) {
         let container: NSPersistentContainer? = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer
         guard let context = container?.viewContext else { return }
@@ -72,11 +74,20 @@ class TwitterUserCollectionViewController: UICollectionViewController, UICollect
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let twitterTimelineController = TwitterTimelineController()
         guard let selectedUserID = displayedUsers[indexPath.row].userID else { return }
+        
+        displayLoadingMessage(for: displayedUsers[indexPath.row])
+        
         twitterTimelineController.fetchThreadedTimeline(forUserID: selectedUserID) { [weak self] (threadedTimelineTweets) in
-            let threadedTweetTableViewController = self?.storyboard!.instantiateViewController(withIdentifier: "ThreadedTweetTableViewController") as! ThreadedTweetTableViewController
-            threadedTweetTableViewController.threadedTweets = threadedTimelineTweets
-            threadedTweetTableViewController.navigationBarTitle = self?.displayedUsers[indexPath.row].fullName
-            self?.navigationController?.pushViewController(threadedTweetTableViewController, animated: true)
+            let userTimelineTableViewController = self?.storyboard!.instantiateViewController(withIdentifier: "UserTimelineTableViewController") as! UserTimelineTableViewController
+            userTimelineTableViewController.threadedTweets = threadedTimelineTweets
+            userTimelineTableViewController.user = self?.displayedUsers[indexPath.row]
+            userTimelineTableViewController.navigationBarTitle = self?.displayedUsers[indexPath.row].fullName
+            
+            self?.navigationController?.pushViewController(userTimelineTableViewController, animated: true)
+            
+            if let displayedLoadingView = self?.loadingView {
+                displayedLoadingView.dismiss(animated: false, completion: nil)
+            }
         }
     }
     
@@ -87,6 +98,20 @@ class TwitterUserCollectionViewController: UICollectionViewController, UICollect
         let marginsAndInsets = flowLayout.sectionInset.left + flowLayout.sectionInset.right + flowLayout.minimumInteritemSpacing * CGFloat(cellsPerRow - 1)
         let itemWidth = ((collectionView.bounds.size.width - marginsAndInsets) / CGFloat(cellsPerRow)).rounded(.down)
         return CGSize(width: itemWidth, height: itemWidth)
+    }
+    
+    // MARK:- Loading message
+    
+    func displayLoadingMessage(for twitterUser: TwitterUser) {
+        loadingView = UIAlertController(title: nil, message: "Getting timeline...", preferredStyle: .alert)
+        
+        let loadingIndicator = UIActivityIndicatorView(frame: CGRect(x: 10, y: 5, width: 50, height: 50))
+        loadingIndicator.hidesWhenStopped = true
+        loadingIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.gray
+        loadingIndicator.startAnimating();
+        
+        loadingView!.view.addSubview(loadingIndicator)
+        present(loadingView!, animated: false, completion: nil)
     }
     
     // MARK: - Temporary
@@ -118,4 +143,8 @@ extension TwitterUserCollectionViewController: UICollectionViewDataSourcePrefetc
         let urls = indexPaths.compactMap { URL(string: displayedUsers[$0.row].profileImageURL ?? "") }
         ImagePrefetcher(urls: urls).start()
     }
+}
+
+extension TwitterUserCollectionViewController: CAAnimationDelegate {
+    
 }

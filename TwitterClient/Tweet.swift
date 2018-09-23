@@ -56,7 +56,11 @@ class Tweet: NSManagedObject {
         // Get display text range since we use extended tweets
         if let startIndex = tweetJSON["display_text_range"][0].integer, let endIndex = tweetJSON["display_text_range"][1].integer {
             tweet.displayTextStartIndex = Int16(startIndex)
-            tweet.displayTextEndIndex = Int16(endIndex)
+            
+            // We need to know if we shortened the text by escaping characters above and adjust the end index if so
+            let rawText = tweetJSON["full_text"].string ?? tweetJSON["text"].string ?? ""
+            let endIndexAdjustment = tweet.text!.count - rawText.count
+            tweet.displayTextEndIndex = Int16(endIndex) + Int16(endIndexAdjustment)
         }
         
         // Get date
@@ -92,7 +96,7 @@ class Tweet: NSManagedObject {
         
         // Get user
         do {
-            tweet.tweeter = try TwitterUser.findOrCreateTwitterUser(matching: tweetJSON["user"], in: context)
+            tweet.tweeter = try TwitterUser.findOrCreateTwitterUser(matching: tweetJSON["user"], in: context) // May need a subcontext here (I think) because findOr...TwitterUser tries to save the context before tweet.tweeter gets assigned
         } catch {
             print("Error finding or creating tweeter for tweet: \(error)")
         }
@@ -143,6 +147,7 @@ class Tweet: NSManagedObject {
                     tweetCard.imageURL = cardTuple.cardImageURL
                     tweetCard.title = cardTuple.cardTitle
                     tweetCard.type = cardTuple.cardType
+                    tweetCard.displayURL = cardTuple.cardDisplayURL
                     tweetCard.relatedTweetURL = cardTuple.relatedTweetURL
                     tweetCard.tweet = tweet
                 }

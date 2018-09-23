@@ -74,10 +74,22 @@ class AuthenticationViewController: UIViewController, SFSafariViewControllerDele
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        
+        // Check if we already have a token and login without waiting for user input if we do
+        if let savedTokenPartsArray = UserDefaults.standard.array(forKey: "token") as? [String] {
+            authorizedToken = Credential.OAuthAccessToken.init(queryString: assembleTokenQueryString(from: savedTokenPartsArray))
+            if authorizedToken != nil {
+                login()
+            }
+        }
     }
     
     @IBAction func didTouchUpInsideLoginButton(_ sender: UIButton) {
         login()
+    }
+    
+    func assembleTokenQueryString(from tokenPartsArray: [String]) -> String {
+        return "oauth_token=\(tokenPartsArray[0])&oauth_token_secret=\(tokenPartsArray[1])&user_id=\(tokenPartsArray[3])&screen_name=\(tokenPartsArray[2])&x_auth_expires=0"
     }
     
     func login() {
@@ -85,9 +97,9 @@ class AuthenticationViewController: UIViewController, SFSafariViewControllerDele
             self.alert("Error", message: error.localizedDescription)
         }
         
-        func assembleTokenQueryString(from tokenPartsArray: [String]) -> String {
-            return "oauth_token=\(tokenPartsArray[0])&oauth_token_secret=\(tokenPartsArray[1])&user_id=\(tokenPartsArray[3])&screen_name=\(tokenPartsArray[2])&x_auth_expires=0"
-        }
+        // Set UI to how it should look while we are logging in
+        loginButton.setBackgroundImage(UIImage(named: "Twitter Logging In Button"), for: .disabled)
+        loginButton.isEnabled = false
         
         let url = URL(string: "swifter://success")!
         
@@ -160,26 +172,5 @@ extension UIViewController {
         } else {
             return self
         }
-    }
-}
-
-extension UIView {
-    func addBackground(imageName: String = "Gradient Gray Background", contextMode: UIViewContentMode = .scaleToFill) {
-        // setup the UIImageView
-        let backgroundImageView = UIImageView(frame: UIScreen.main.bounds)
-        backgroundImageView.image = UIImage(named: imageName)
-        backgroundImageView.contentMode = contentMode
-        backgroundImageView.translatesAutoresizingMaskIntoConstraints = false
-        
-        addSubview(backgroundImageView)
-        sendSubview(toBack: backgroundImageView)
-        
-        // adding NSLayoutConstraints
-        let leadingConstraint = NSLayoutConstraint(item: backgroundImageView, attribute: .leading, relatedBy: .equal, toItem: self, attribute: .leading, multiplier: 1.0, constant: 0.0)
-        let trailingConstraint = NSLayoutConstraint(item: backgroundImageView, attribute: .trailing, relatedBy: .equal, toItem: self, attribute: .trailing, multiplier: 1.0, constant: 0.0)
-        let topConstraint = NSLayoutConstraint(item: backgroundImageView, attribute: .top, relatedBy: .equal, toItem: self, attribute: .top, multiplier: 1.0, constant: 0.0)
-        let bottomConstraint = NSLayoutConstraint(item: backgroundImageView, attribute: .bottom, relatedBy: .equal, toItem: self, attribute: .bottom, multiplier: 1.0, constant: 0.0)
-        
-        NSLayoutConstraint.activate([leadingConstraint, trailingConstraint, topConstraint, bottomConstraint])
     }
 }

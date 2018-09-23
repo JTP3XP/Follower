@@ -34,7 +34,7 @@ class TweetSummaryCardTableViewCell: TweetTableViewCell {
         cardTitleLabel.text = tweet?.card?.title ?? "Link"
         
         // Set card subtitle
-        cardSubtitleLabel.text = tweet?.card?.relatedTweetURL?.urlString ?? ""
+        cardSubtitleLabel.text = generateCardSubtitle()
         
         // Set link picture
         cardImageView.image = nil
@@ -72,6 +72,31 @@ class TweetSummaryCardTableViewCell: TweetTableViewCell {
         if let cardURLString = tweet?.card?.relatedTweetURL?.urlString, let cardURL = URL(string: cardURLString) {
             //UIApplication.shared.open(cardURL, options: [:], completionHandler: nil)
             askDelegateToOpenInSafariViewController(url: cardURL)
+        }
+    }
+    
+    // MARK:- Convenience Functions
+    private func generateCardSubtitle() -> String {
+        let shortURLString = getHost(from: tweet?.card?.displayURL ?? "") ?? ""
+        if shortURLString == "t.co" { return "" }
+        return shortURLString
+    }
+    
+    private func getHost(from URLString: String) -> String? {
+        if let url = URL(string: URLString), let host = url.host {
+            return removeWWWFromBeginning(of: host)
+        } else {
+            return nil
+        }
+    }
+    
+    private func removeWWWFromBeginning(of URLString: String) -> String {
+        if URLString.prefix(4).lowercased() == "www." {
+            let start = URLString.index(URLString.startIndex, offsetBy: 4)
+            let string = String(URLString[start..<URLString.endIndex])
+            return string
+        } else {
+            return URLString
         }
     }
 }

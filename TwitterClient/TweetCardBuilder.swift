@@ -13,7 +13,7 @@ import UIKit
 class TweetCardBuilder {
     
     // MARK:- Class Functions
-    static func buildCard(for tweet: Tweet, completionHandler: @escaping ((cardType: String, cardTitle:String, cardImageURL: String, relatedTweetURL: TweetURL)?) -> ()) {
+    static func buildCard(for tweet: Tweet, completionHandler: @escaping ((cardType: String, cardTitle:String, cardImageURL: String, cardDisplayURL: String, relatedTweetURL: TweetURL)?) -> ()) {
         
         // There has to be a URL in the tweet for there to be a card
         guard let tweetUrlSet = tweet.urls, tweetUrlSet.count > 0 else {
@@ -37,6 +37,7 @@ class TweetCardBuilder {
                 
                 if let cardType = metaData["twitter:card"], let cardTitle = metaData["twitter:title"] ?? metaData["og:title"] {
                     var cardImageURL: String?
+                    let cardDisplayURL: String = metaData["twitter:url"] ?? tweetUrls.last!.urlString ?? ""
                     
                     if let htmlCardImageURL = metaData["twitter:image"] ?? metaData["og:image"] {
                         cardImageURL = htmlCardImageURL
@@ -46,7 +47,7 @@ class TweetCardBuilder {
                     }
                     
                     if cardImageURL != nil {
-                        completionHandler((cardType: cardType, cardTitle: cardTitle.htmlDecoded, cardImageURL: cardImageURL!, relatedTweetURL: tweetUrls.last!))
+                        completionHandler((cardType: cardType, cardTitle: cardTitle.htmlDecoded, cardImageURL: cardImageURL!, cardDisplayURL: cardDisplayURL, relatedTweetURL: tweetUrls.last!))
                     } else {
                         completionHandler(nil)
                     }

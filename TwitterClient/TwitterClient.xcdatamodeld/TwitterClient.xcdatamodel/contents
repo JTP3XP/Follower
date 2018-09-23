@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="13772" systemVersion="16G1314" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14135" systemVersion="17F77" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Hashtag" representedClassName=".Hashtag" syncable="YES" codeGenerationType="category">
         <attribute name="endIndex" attributeType="Integer 16" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="startIndex" attributeType="Integer 16" usesScalarValueType="YES" syncable="YES"/>
@@ -31,6 +31,7 @@
         </fetchIndex>
     </entity>
     <entity name="TweetCard" representedClassName=".TweetCard" syncable="YES" codeGenerationType="category">
+        <attribute name="displayURL" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="imageURL" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
@@ -71,7 +72,7 @@
     <elements>
         <element name="Hashtag" positionX="241" positionY="-108" width="128" height="103"/>
         <element name="Tweet" positionX="-65" positionY="-232" width="128" height="328"/>
-        <element name="TweetCard" positionX="135" positionY="-289" width="128" height="118"/>
+        <element name="TweetCard" positionX="135" positionY="-289" width="128" height="133"/>
         <element name="TweetImage" positionX="99" positionY="-423" width="128" height="118"/>
         <element name="TweetURL" positionX="295" positionY="-244" width="128" height="118"/>
         <element name="TwitterUser" positionX="-236" positionY="-234" width="128" height="163"/>

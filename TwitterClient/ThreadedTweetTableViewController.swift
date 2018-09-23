@@ -131,7 +131,7 @@ class ThreadedTweetTableViewController: UITableViewController, TweetTableViewCel
             titleNavigationItem.title = tableTitle
         }
         
-        tableView.rowHeight = UITableViewAutomaticDimension // Autosize based on cell contents
+        tableView.rowHeight = UITableView.automaticDimension // Autosize based on cell contents
         tableView.estimatedRowHeight = 120
         
         refreshControl?.addTarget(self, action: #selector(refresh), for: .valueChanged)

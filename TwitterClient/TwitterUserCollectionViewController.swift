@@ -107,7 +107,7 @@ class TwitterUserCollectionViewController: UICollectionViewController, UICollect
         
         let loadingIndicator = UIActivityIndicatorView(frame: CGRect(x: 10, y: 5, width: 50, height: 50))
         loadingIndicator.hidesWhenStopped = true
-        loadingIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.gray
+        loadingIndicator.style = UIActivityIndicatorView.Style.gray
         loadingIndicator.startAnimating();
         
         loadingView!.view.addSubview(loadingIndicator)
@@ -117,7 +117,7 @@ class TwitterUserCollectionViewController: UICollectionViewController, UICollect
     // MARK: - Temporary
     
     func deleteTweetsIfUserWantsTo(using context: NSManagedObjectContext) {
-        let deleteAlert = UIAlertController(title: "Clear existing Tweets?", message: "This is only for testing.", preferredStyle: UIAlertControllerStyle.alert)
+        let deleteAlert = UIAlertController(title: "Clear existing Tweets?", message: "This is only for testing.", preferredStyle: UIAlertController.Style.alert)
         
         deleteAlert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { (action: UIAlertAction!) in
             let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Tweet")

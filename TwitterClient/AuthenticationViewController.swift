@@ -19,12 +19,7 @@ class AuthenticationViewController: UIViewController, SFSafariViewControllerDele
     var authorizedToken: Credential.OAuthAccessToken?
     @IBOutlet weak var loginButton: UIButton!
     @IBOutlet weak var backgroundImageView: UIImageView!
-    
-    private struct API {
-        static let key : String = "cpB8erNVGtNs3d089Mq7yGEa2"
-        static let secret : String = "R2fc5uuuwnQ20JdiGYNYLnjMvT93Q7PpLll3muKCdiYEOnQPyI"
-    }
-    
+
     private struct loginScreen {
         var backgroundImage: UIImage {
             var backgroundImageName = ""
@@ -98,7 +93,7 @@ class AuthenticationViewController: UIViewController, SFSafariViewControllerDele
         }
         
         // Set UI to how it should look while we are logging in
-        loginButton.setBackgroundImage(UIImage(named: "Twitter Logging In Button"), for: .disabled)
+        loginButton.setImage(UIImage(named: "Twitter Logging In Button"), for: .disabled)
         loginButton.isEnabled = false
         
         let url = URL(string: "swifter://success")!

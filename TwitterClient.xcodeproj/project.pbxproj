@@ -68,11 +68,14 @@
 		525454D11EF4DF8F00A47EFE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		525454D41EF4DF8F00A47EFE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		525454D61EF4DF8F00A47EFE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		525454DD1EF4E03C00A47EFE /* SwifteriOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwifteriOS.framework; path = "../../../Library/Developer/Xcode/DerivedData/TwitterClient-giiuwlblukwfqicnliyshyfvyvhl/Build/Products/Debug-iphonesimulator/SwifteriOS.framework"; sourceTree = "<group>"; };
+		5255A35E216EFE6600AB6249 /* debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = debug.xcconfig; sourceTree = "<group>"; };
+		5255A35F216EFE6600AB6249 /* release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = release.xcconfig; sourceTree = "<group>"; };
+		5255A360216EFE6600AB6249 /* debug.example.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = debug.example.xcconfig; sourceTree = "<group>"; };
+		5255A361216EFE6600AB6249 /* release.example.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = release.example.xcconfig; sourceTree = "<group>"; };
+		5255A362216EFEF200AB6249 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = SOURCE_ROOT; };
 		5279CFDD1F5B35FB00FB4403 /* TwitterUserTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TwitterUserTableViewController.swift; sourceTree = "<group>"; };
 		5279CFDF1F5B397700FB4403 /* TwitterUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TwitterUser.swift; sourceTree = "<group>"; };
 		527FFC1E1EF754EA00B76881 /* AuthenticationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationViewController.swift; sourceTree = "<group>"; };
-		527FFC221EF8CED700B76881 /* SwifteriOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SwifteriOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		527FFC261EF8CF9300B76881 /* SwifteriOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SwifteriOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		527FFC2C1EFA1F1200B76881 /* TweetThreader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TweetThreader.swift; sourceTree = "<group>"; };
 		52A1CE5C1F6F3C2600581FD1 /* UserMention.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserMention.swift; sourceTree = "<group>"; };
@@ -128,6 +131,7 @@
 		525454C61EF4DF8F00A47EFE /* TwitterClient */ = {
 			isa = PBXGroup;
 			children = (
+				5255A362216EFEF200AB6249 /* .gitignore */,
 				525454CB1EF4DF8F00A47EFE /* Main.storyboard */,
 				525454CE1EF4DF8F00A47EFE /* TwitterClient.xcdatamodeld */,
 				527FFC1E1EF754EA00B76881 /* AuthenticationViewController.swift */,
@@ -145,6 +149,7 @@
 				52A1CE601F6F3C9B00581FD1 /* Data Types */,
 				52A1CE651F760B9A00581FD1 /* Extensions */,
 				525454DF1EF4E1C000A47EFE /* Supporting Files */,
+				5255A35D216EFDFD00AB6249 /* BuildConfig */,
 			);
 			path = TwitterClient;
 			sourceTree = "<group>";
@@ -152,7 +157,6 @@
 		525454DC1EF4E03C00A47EFE /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				525454DD1EF4E03C00A47EFE /* SwifteriOS.framework */,
 				9991B88551A6B21C527D0BC6 /* Pods_TwitterClient.framework */,
 			);
 			name = Frameworks;
@@ -169,11 +173,21 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		5255A35D216EFDFD00AB6249 /* BuildConfig */ = {
+			isa = PBXGroup;
+			children = (
+				5255A360216EFE6600AB6249 /* debug.example.xcconfig */,
+				5255A35E216EFE6600AB6249 /* debug.xcconfig */,
+				5255A361216EFE6600AB6249 /* release.example.xcconfig */,
+				5255A35F216EFE6600AB6249 /* release.xcconfig */,
+			);
+			path = BuildConfig;
+			sourceTree = "<group>";
+		};
 		527FFC2B1EF8D11800B76881 /* Swifter Framework */ = {
 			isa = PBXGroup;
 			children = (
 				527FFC261EF8CF9300B76881 /* SwifteriOS.framework */,
-				527FFC221EF8CED700B76881 /* SwifteriOS.framework */,
 			);
 			name = "Swifter Framework";
 			sourceTree = "<group>";

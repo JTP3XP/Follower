@@ -24,7 +24,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        swifter = Swifter(consumerKey: "cpB8erNVGtNs3d089Mq7yGEa2", consumerSecret: "R2fc5uuuwnQ20JdiGYNYLnjMvT93Q7PpLll3muKCdiYEOnQPyI")
+        let apiKey = Bundle.main.object(forInfoDictionaryKey: "API Key") as! String
+        let apiSecret = Bundle.main.object(forInfoDictionaryKey: "API Secret") as! String
+        swifter = Swifter(consumerKey: apiKey, consumerSecret: apiSecret)
         return true
     }
 

@@ -22,6 +22,7 @@ class TweetTableViewCell: UITableViewCell {
     @IBOutlet weak var tweetTextLabel: UILabel!
     @IBOutlet weak var profileImageView: UIImageView!
     @IBOutlet weak var tweetTimeLabel: UILabel!
+    @IBOutlet weak var profileImageButton: UIButton!
     
    // @IBOutlet weak var outermostStackView: UIStackView!
     
@@ -47,6 +48,12 @@ class TweetTableViewCell: UITableViewCell {
         profileImageView.kf.cancelDownloadTask()
     }
     
+    @IBAction func tappedProfileImageButton(_ sender: UIButton) {
+        if let delegateThatLoadsTimelines = delegate, let selectedUser = tweet?.tweeter {
+            delegateThatLoadsTimelines.loadTimeline(forSelected: selectedUser)
+        }
+    }
+    
     // MARK: Lifecycle methods
     
     override func layoutSubviews() {
@@ -67,4 +74,5 @@ class TweetTableViewCell: UITableViewCell {
 
 protocol TweetTableViewCellDelegate {
     func openInSafariViewController(url: URL)
+    func loadTimeline(forSelected user: TwitterUser)
 }

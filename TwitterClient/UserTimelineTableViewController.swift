@@ -49,5 +49,11 @@ class UserTimelineTableViewController: ThreadedTweetTableViewController {
             }
         }
     }
+    
+    override func loadTimeline(forSelected user: TwitterUser) {
+        if let displayedUser = self.user, displayedUser != user {
+            loadTimeline(for: user)
+        }
+    }
 
 }

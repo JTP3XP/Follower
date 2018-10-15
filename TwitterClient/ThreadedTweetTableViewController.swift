@@ -12,10 +12,11 @@ import SafariServices
 import Kingfisher
 import GSImageViewerController
 
-class ThreadedTweetTableViewController: UITableViewController, TweetTableViewCellDelegate {
+class ThreadedTweetTableViewController: UITableViewController, TweetTableViewCellDelegate, UserTimelineLoader {
 
     var threadedTweets = [[Tweet]]()
     var navigationBarTitle: String?
+    internal var loadingView: UIAlertController?
     
     @IBOutlet weak var titleNavigationItem: UINavigationItem!
     
@@ -41,6 +42,11 @@ class ThreadedTweetTableViewController: UITableViewController, TweetTableViewCel
         refreshControl?.attributedTitle = NSAttributedString(string: "Loading newer tweets")
         refreshControl?.endRefreshing()
         refreshControl?.attributedTitle = NSAttributedString(string: "Load newer tweets")
+    }
+    
+    func loadTimeline(forSelected user: TwitterUser) {
+        // This overload lets us override the function in child classes while still leveraging the protocol's default implementation
+        loadTimeline(for: user)
     }
     
     // MARK:- Tweet Table View Cell Delegate

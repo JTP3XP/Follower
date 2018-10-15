@@ -19,7 +19,7 @@ class TwitterUserCollectionViewController: UICollectionViewController, UICollect
     let margin: CGFloat = 5
     let cellsPerRow = 2
     
-    private var loadingView: UIAlertController?
+    internal var loadingView: UIAlertController?
     
     @IBAction func testButtonPressed(_ sender: UIBarButtonItem) {
         let container: NSPersistentContainer? = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer
@@ -70,25 +70,12 @@ class TwitterUserCollectionViewController: UICollectionViewController, UICollect
     }
 
     // MARK: UICollectionViewDelegate
-
+    
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let twitterTimelineController = TwitterTimelineController()
-        guard let selectedUserID = displayedUsers[indexPath.row].userID else { return }
         
-        displayLoadingMessage(for: displayedUsers[indexPath.row])
+        let selectedUser = displayedUsers[indexPath.row]
+        loadTimeline(for: selectedUser)
         
-        twitterTimelineController.fetchThreadedTimeline(forUserID: selectedUserID) { [weak self] (threadedTimelineTweets) in
-            let userTimelineTableViewController = self?.storyboard!.instantiateViewController(withIdentifier: "UserTimelineTableViewController") as! UserTimelineTableViewController
-            userTimelineTableViewController.threadedTweets = threadedTimelineTweets
-            userTimelineTableViewController.user = self?.displayedUsers[indexPath.row]
-            userTimelineTableViewController.navigationBarTitle = self?.displayedUsers[indexPath.row].fullName
-            
-            self?.navigationController?.pushViewController(userTimelineTableViewController, animated: true)
-            
-            if let displayedLoadingView = self?.loadingView {
-                displayedLoadingView.dismiss(animated: false, completion: nil)
-            }
-        }
     }
     
     // MARK: UICollectionViewDelegateFlowLayout
@@ -98,20 +85,6 @@ class TwitterUserCollectionViewController: UICollectionViewController, UICollect
         let marginsAndInsets = flowLayout.sectionInset.left + flowLayout.sectionInset.right + flowLayout.minimumInteritemSpacing * CGFloat(cellsPerRow - 1)
         let itemWidth = ((collectionView.bounds.size.width - marginsAndInsets) / CGFloat(cellsPerRow)).rounded(.down)
         return CGSize(width: itemWidth, height: itemWidth)
-    }
-    
-    // MARK:- Loading message
-    
-    func displayLoadingMessage(for twitterUser: TwitterUser) {
-        loadingView = UIAlertController(title: nil, message: "Getting timeline...", preferredStyle: .alert)
-        
-        let loadingIndicator = UIActivityIndicatorView(frame: CGRect(x: 10, y: 5, width: 50, height: 50))
-        loadingIndicator.hidesWhenStopped = true
-        loadingIndicator.style = UIActivityIndicatorView.Style.gray
-        loadingIndicator.startAnimating();
-        
-        loadingView!.view.addSubview(loadingIndicator)
-        present(loadingView!, animated: false, completion: nil)
     }
     
     // MARK: - Temporary
@@ -145,6 +118,6 @@ extension TwitterUserCollectionViewController: UICollectionViewDataSourcePrefetc
     }
 }
 
-extension TwitterUserCollectionViewController: CAAnimationDelegate {
-    
-}
+extension TwitterUserCollectionViewController: UserTimelineLoader {}
+
+extension TwitterUserCollectionViewController: CAAnimationDelegate {}

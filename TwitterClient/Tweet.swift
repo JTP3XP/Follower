@@ -15,9 +15,18 @@ class Tweet: NSManagedObject {
     
     var displayText: String? {
         get {
-            if let tweetText = text, let upperBound = tweetText.index(tweetText.startIndex, offsetBy: Int(displayTextEndIndex), limitedBy: tweetText.endIndex) {
-                let lowerBound = tweetText.index(tweetText.startIndex, offsetBy: Int(displayTextStartIndex))
-                let displayedPortionOfText = String(tweetText[lowerBound..<upperBound])
+            if let tweetText = text, let upperBound = tweetText.unicodeScalars.index(tweetText.unicodeScalars.startIndex, offsetBy: Int(displayTextEndIndex), limitedBy: tweetText.unicodeScalars.endIndex) {
+                let lowerBound = tweetText.unicodeScalars.index(tweetText.unicodeScalars.startIndex, offsetBy: Int(displayTextStartIndex))
+                var displayedPortionOfText = String(tweetText.unicodeScalars[lowerBound..<upperBound])
+                
+                if let urlCount = self.urls?.count, urlCount > 0 {
+                    for case let url as TweetURL in self.urls! {
+                        if let twitterVersionOfURLString = url.twitterVersionOfURLString, let displayURLString = url.displayURLString {
+                            displayedPortionOfText = displayedPortionOfText.replacingOccurrences(of: twitterVersionOfURLString, with: displayURLString)
+                        }
+                    }
+                }
+                
                 return displayedPortionOfText
             }
             return text
@@ -102,7 +111,7 @@ class Tweet: NSManagedObject {
         }
         
         if let tweeter = tweet.tweeter {
-            // This will not be nil for the followed users beacuse of the way we record this when loading the followed users, and we do not care to log this for anyone else because this is just used to indicate unread tweets from followed users
+            // This will not be nil for the followed users because of the way we record this when loading the followed users, and we do not care to log this for anyone else because this is just used to indicate unread tweets from followed users
             if let timestampToUpdate = tweeter.mostRecentTweetTimestamp, let dateToCompare = tweet.date, timestampToUpdate < dateToCompare {
                 tweeter.mostRecentTweetTimestamp = tweet.date
             }
@@ -118,10 +127,7 @@ class Tweet: NSManagedObject {
         // Get entities
         if let urlJSONArray = tweetJSON["entities"]["urls"].array {
             for urlJSON in urlJSONArray {
-                if let urlString = urlJSON["url"].string, let startIndex = urlJSON["indices"][0].integer, let endIndex = urlJSON["indices"][1].integer {
-                    let newUrl = TweetURL.createTweetURL(from: urlString, startIndex: startIndex, endIndex: endIndex, in: context)
-                    newUrl.tweet = tweet
-                }
+                let _ = TweetURL.createTweetURL(from: urlJSON, partOf: tweet, in: context)
             }
         }
         
@@ -159,6 +165,7 @@ class Tweet: NSManagedObject {
     }
     
 }
+
 
 extension String {
 

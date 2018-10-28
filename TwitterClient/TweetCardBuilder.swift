@@ -23,7 +23,7 @@ class TweetCardBuilder {
         var tweetUrls = tweetUrlSet.allObjects as! [TweetURL]
         tweetUrls.sort { $0.startIndex < $1.startIndex }
         
-        guard let cardURLString = tweetUrls.last?.urlString, let url = URL(string: cardURLString) else { // the card is always based on the last URL in the tweet
+        guard let cardURLString = tweetUrls.last?.twitterVersionOfURLString, let url = URL(string: cardURLString) else { // the card is always based on the last URL in the tweet
             return
         }
         
@@ -37,7 +37,7 @@ class TweetCardBuilder {
                 
                 if let cardType = metaData["twitter:card"], let cardTitle = metaData["twitter:title"] ?? metaData["og:title"] {
                     var cardImageURL: String?
-                    let cardDisplayURL: String = metaData["twitter:url"] ?? tweetUrls.last!.urlString ?? ""
+                    let cardDisplayURL: String = metaData["twitter:url"] ?? tweetUrls.last!.twitterVersionOfURLString ?? ""
                     
                     if let htmlCardImageURL = metaData["twitter:image"] ?? metaData["og:image"] {
                         cardImageURL = htmlCardImageURL

@@ -27,9 +27,29 @@ class TwitterUserCollectionViewController: UICollectionViewController, UICollect
         deleteTweetsIfUserWantsTo(using: context)
     }
     
+    @objc private func checkTwitterForUpdates() {
+        
+        print("Checking for updates...")
+        
+        let container: NSPersistentContainer? = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer
+        guard let context = container?.viewContext else { return }
+        
+        for user in displayedUsers {
+            user.refresh(in: context) { [weak self] _ in
+                for cell in self?.collectionView!.visibleCells as! [TwitterUserCollectionViewCell] {
+                    cell.updateUI()
+                }
+            }
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionView?.prefetchDataSource = self
+        
+        // Listen for the app becoming active - this could happen after hours of being inactive, so there could definitely be new unread tweets
+        let notificationCenter = NotificationCenter.default
+        notificationCenter.addObserver(self, selector: #selector(checkTwitterForUpdates), name: UIApplication.didBecomeActiveNotification , object: nil)
         
         guard let flowLayout = collectionView?.collectionViewLayout as? UICollectionViewFlowLayout else { return }
         flowLayout.minimumInteritemSpacing = margin
@@ -44,6 +64,10 @@ class TwitterUserCollectionViewController: UICollectionViewController, UICollect
         for cell in collectionView!.visibleCells as! [TwitterUserCollectionViewCell] {
             cell.updateUI()
         }
+        
+        // It's also possible that followed users have been tweeting while this view was in the background, so check for any updates
+        checkTwitterForUpdates()
+        
     }
     
     // MARK: - Navigation
@@ -63,6 +87,10 @@ class TwitterUserCollectionViewController: UICollectionViewController, UICollect
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! TwitterUserCollectionViewCell
     
+        // Clear out any existing content
+        cell.profileImageView.image = nil
+        cell.unreadGlowImageView.image = nil
+        
         // Configure the cell
         cell.twitterUser = displayedUsers[indexPath.row]
     
@@ -97,6 +125,7 @@ class TwitterUserCollectionViewController: UICollectionViewController, UICollect
             let batchDeleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
             do {
                 try context.execute(batchDeleteRequest)
+                try context.save()
             } catch {
                 print("Error deleting data")
             }

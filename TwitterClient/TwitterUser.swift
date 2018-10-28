@@ -21,11 +21,7 @@ class TwitterUser: NSManagedObject {
             if matches.count > 0 {
                 assert(matches.count == 1, "TwitterUser.findOrCreateTwitterUser -- database inconsistency!")
                 let userObjectInDatabase = matches[0]
-                do {
-                    try userObjectInDatabase.update(using: twitterJSON, in: context)
-                } catch {
-                    print("Error updating user object")
-                }
+                userObjectInDatabase.update(using: twitterJSON, in: context)
                 return userObjectInDatabase
             }
         } catch {
@@ -47,15 +43,6 @@ class TwitterUser: NSManagedObject {
                 twitterUser.mostRecentTweetTimestamp = mostRecentTweetTimestamp
             }
         }
-
-        /*
-        // In case we want to fetch more user info ...
-        if let swifter = (UIApplication.shared.delegate as! AppDelegate).swifter {
-            _ = swifter.showUser(for: UserTag.id(twitterUser.userID!), success: { userJSON in
-                print("\(userJSON)")
-            }, failure: { _ in print("showUser failed for user ID \(twitterUser.userID!)") })
-        }
-        */
         
         if context.hasChanges {
             do {
@@ -68,7 +55,18 @@ class TwitterUser: NSManagedObject {
         return twitterUser
     }
     
-    private func update(using twitterJSON: JSON, in context: NSManagedObjectContext) throws {
+    func refresh(in context: NSManagedObjectContext, completionHandler: @escaping (TwitterUser) -> ()) {
+        if let swifter = (UIApplication.shared.delegate as! AppDelegate).swifter {
+            _ = swifter.showUser(for: UserTag.id(self.userID!), success: { userJSON in
+                self.update(using: userJSON, in: context)
+                completionHandler(self)
+            }, failure: { _ in
+                print("showUser failed for user ID \(self.userID!)")
+            })
+        }
+    }
+    
+    private func update(using twitterJSON: JSON, in context: NSManagedObjectContext) {
         // This will run every time we search the database using user JSON and can be used to update anything that is expected to change over time
         
         let currentProfileImageURL = twitterJSON["profile_image_url_https"].string?.replacingOccurrences(of: "_normal.", with: ".")

@@ -44,6 +44,8 @@ class TwitterTimelineController {
                     fatalError("Failure to save context: \(error)")
                 }
                 
+                print("MaxID: \(self.maxTweetID ?? "none") ID: \((tweet?.id)!) Date:\((tweet?.date)!)")
+                
                 let tweetThreader = TweetThreader()
                 tweetThreader.swifter = self.swifter
                 tweetThreader.tweet = tweet

@@ -114,6 +114,7 @@ class ThreadedTweetTableViewController: UITableViewController, TweetTableViewCel
         case .tweet(let tweet):
             let tweetJSON = tweet.originalJSON
             print(tweetJSON ?? "Could not find JSON in database")
+            print(tweet)
             print("")
             print("End of tweet")
         case .action(let action):

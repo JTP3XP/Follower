@@ -18,6 +18,8 @@ class TwitterUserCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var usernameLabel: UILabel!
     @IBOutlet weak var unreadGlowImageView: UIImageView!
     
+    private var displayedProfileImageURL: String?
+    
     func updateUI() {
         
         guard let twitterUser = twitterUser else {
@@ -28,16 +30,17 @@ class TwitterUserCollectionViewCell: UICollectionViewCell {
         usernameLabel.text = "@\(twitterUser.username!)"
         
         // Set profile picture
-        profileImageView.image = nil
         if let profileImageURL = twitterUser.profileImageURL {
-            profileImageView.kf.setImage(with: URL(string: profileImageURL))
+            if displayedProfileImageURL != profileImageURL {
+                profileImageView.kf.setImage(with: URL(string: profileImageURL))
+            }
         }
         
-        unreadGlowImageView.image = nil // Clear out indicator in case we are reusing a collection view cell that was presenting it
-        
+        // Set unread glow
         if let mostRecentTweetTimestamp = twitterUser.mostRecentTweetTimestamp, let mostRecentReadTweetTimestamp = twitterUser.mostRecentReadTweetTimestamp, mostRecentTweetTimestamp > mostRecentReadTweetTimestamp {
-            print("\(twitterUser.fullName!) has unread tweet(s)")
             unreadGlowImageView.image = #imageLiteral(resourceName: "Unread Tweet Glow")
+        } else {
+            unreadGlowImageView.image = nil
         }
     }
     

@@ -69,7 +69,7 @@ class TweetSummaryCardTableViewCell: TweetTableViewCell {
 
     @objc func cardTapped() {
         print("Card tapped")
-        if let cardURLString = tweet?.card?.relatedTweetURL?.urlString, let cardURL = URL(string: cardURLString) {
+        if let cardURLString = tweet?.card?.relatedTweetURL?.twitterVersionOfURLString, let cardURL = URL(string: cardURLString) {
             //UIApplication.shared.open(cardURL, options: [:], completionHandler: nil)
             askDelegateToOpenInSafariViewController(url: cardURL)
         }

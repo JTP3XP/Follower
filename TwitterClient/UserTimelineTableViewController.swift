@@ -26,7 +26,6 @@ class UserTimelineTableViewController: ThreadedTweetTableViewController {
                 
                 let tweetID = flatTweets.reduce(Int.max) { (result, tweet) -> Int in
                     if tweet.tweeter == user, let tweetIDInt = Int(tweet.id!) {
-                        if result > tweetIDInt { print("Found older tweet \(tweetIDInt) from \(tweet.date!)") }
                         return min(result, tweetIDInt)
                     } else {
                         return min(result, Int.max)

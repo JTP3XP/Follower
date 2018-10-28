@@ -35,16 +35,12 @@ class TwitterTimelineController {
             var threadedTweets = [[Tweet]]()
             for tweetJSON in tweetsJSON {
                 
-                //guard let context = self.context else { return }
-                
                 let tweet = try? Tweet.findOrCreateTweet(matching: tweetJSON, in: self.context)
                 do {
                     try self.context.save()
                 } catch {
                     fatalError("Failure to save context: \(error)")
                 }
-                
-                print("MaxID: \(self.maxTweetID ?? "none") ID: \((tweet?.id)!) Date:\((tweet?.date)!)")
                 
                 let tweetThreader = TweetThreader()
                 tweetThreader.swifter = self.swifter

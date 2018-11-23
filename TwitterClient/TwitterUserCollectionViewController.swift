@@ -21,129 +21,6 @@ class TwitterUserCollectionViewController: UICollectionViewController, UICollect
     
     internal var loadingView: UIAlertController?
     
-    private var imageView = UIImageView(image: UIImage(named: "Twitter Default User Image"))
-    private var userLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 16, height: 16))
-    
-    // MARK:- Navigation Bar
-    private struct Const {
-        // Image height/width for Large NavBar state
-        static let ImageSizeForLargeState: CGFloat = 40
-        // Margin from bottom anchor of NavBar to bottom anchor of label for Large NavBar state
-        static let ImageBottomMarginForLargeState: CGFloat = 6
-        // Margin from bottom anchor of NavBar to bottom anchor of Image for Small NavBar state
-        static let ImageBottomMarginForSmallState: CGFloat = 6
-        // Image height/width for Small NavBar state
-        static let ImageSizeForSmallState: CGFloat = 32
-        // Label height for large state
-        static let LabelHeightForLargeState: CGFloat = 16
-        // Label height for small state
-        static let LabelHeightForSmallState: CGFloat = 0
-        // Margin from bottom anchor of NavBar to bottom anchor of label for large NavBar state
-        static let LabelBottomMarginForLargeState: CGFloat = 4
-        // Margin from bottom anchor of NavBar to bottom anchor of label for large NavBar state
-        static let LabelBottomMarginForSmallState: CGFloat = 0
-        // Height of NavBar for Small state. Usually it's just 44
-        static let NavBarHeightSmallState: CGFloat = 44
-        // Height of NavBar for Large state. Usually it's just 96.5 but if you have a custom font for the title, please make sure to edit this value since it changes the height for Large state of NavBar
-        static let NavBarHeightLargeState: CGFloat = 96.5
-    }
-    
-    private func setupUI() {
-        
-        //title = "Large Title"
-        userLabel.text = "John Patton"
-        userLabel.textAlignment = .center
-        
-        // Initial setup for image for Large NavBar state since the the screen always has Large NavBar once it gets opened
-        guard let navigationBar = self.navigationController?.navigationBar else { return }
-        navigationBar.addSubview(imageView)
-        navigationBar.addSubview(userLabel)
-        
-        imageView.layer.cornerRadius = Const.ImageSizeForLargeState / 2
-        imageView.clipsToBounds = true
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        userLabel.translatesAutoresizingMaskIntoConstraints = false
-
-        NSLayoutConstraint.activate([
-            imageView.centerXAnchor.constraint(equalTo: navigationBar.centerXAnchor),
-            imageView.heightAnchor.constraint(equalToConstant: Const.ImageSizeForLargeState),
-            imageView.widthAnchor.constraint(equalTo: imageView.heightAnchor),
-            imageView.topAnchor.constraint(equalTo: navigationBar.topAnchor, constant: 6),
-            userLabel.heightAnchor.constraint(equalToConstant: Const.LabelHeightForLargeState),
-            userLabel.widthAnchor.constraint(equalTo: navigationBar.widthAnchor),
-            userLabel.centerXAnchor.constraint(equalTo: navigationBar.centerXAnchor),
-            userLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: Const.ImageBottomMarginForLargeState),
-            //userLabel.bottomAnchor.constraint(greaterThanOrEqualTo: navigationBar.bottomAnchor, constant: -Const.LabelBottomMarginForLargeState),
-            ])
-    }
-    
-    private func moveAndResizeImage(for height: CGFloat) {
-        let coeff: CGFloat = {
-            let delta = height - Const.NavBarHeightSmallState
-            let heightDifferenceBetweenStates = (Const.NavBarHeightLargeState - Const.NavBarHeightSmallState)
-            return delta / heightDifferenceBetweenStates
-        }()
-        
-        let factor = Const.ImageSizeForSmallState / Const.ImageSizeForLargeState
-        
-        let scale: CGFloat = {
-            let sizeAddendumFactor = coeff * (1.0 - factor)
-            return min(1.0, sizeAddendumFactor + factor)
-        }()
-        
-        // Value of difference between icons for large and small states
-        let sizeDiff = Const.ImageSizeForLargeState * (1.0 - factor)
-        let yTranslation: CGFloat = {
-            let maxYTranslation = Const.ImageBottomMarginForLargeState - Const.ImageBottomMarginForSmallState + sizeDiff
-            return max(0, min(maxYTranslation, (maxYTranslation - coeff * (Const.ImageBottomMarginForSmallState + sizeDiff))))
-        }()
-        
-        let xTranslation = max(0, sizeDiff - coeff * sizeDiff)
-        
-        imageView.transform = CGAffineTransform.identity
-            .scaledBy(x: scale, y: scale)
-            //.translatedBy(x: xTranslation, y: yTranslation)
-    }
-    
-    private func moveAndResizeLabel(for height: CGFloat) {
-        userLabel.alpha = height >= Const.NavBarHeightLargeState * 0.9 ? 1.0 : 0.0
-        
-        let coeff: CGFloat = {
-            let delta = height - Const.NavBarHeightSmallState
-            let heightDifferenceBetweenStates = (Const.NavBarHeightLargeState - Const.NavBarHeightSmallState)
-            return delta / heightDifferenceBetweenStates
-        }()
-        
-        let factor = Const.LabelHeightForSmallState / Const.LabelHeightForLargeState
-        
-        let scale: CGFloat = {
-            let sizeAddendumFactor = coeff * (1.0 - factor)
-            return min(1.0, sizeAddendumFactor + factor)
-        }()
-        
-        // Value of difference between icons for large and small states
-        let sizeDiff = Const.LabelHeightForLargeState * (1.0 - factor) // 8.0
-        let yTranslation: CGFloat = {
-            /// This value = 14. It equals to difference of 12 and 6 (bottom margin for large and small states). Also it adds 8.0 (size difference when the image gets smaller size)
-            let maxYTranslation = Const.LabelBottomMarginForLargeState - Const.LabelBottomMarginForSmallState + sizeDiff
-            return max(0, min(maxYTranslation, (maxYTranslation - coeff * (Const.LabelBottomMarginForSmallState + sizeDiff))))
-        }()
-        
-        let xTranslation = max(0, sizeDiff - coeff * sizeDiff)
-        
-        userLabel.transform = CGAffineTransform.identity
-            .scaledBy(x: scale, y: scale)
-            //.translatedBy(x: xTranslation, y: yTranslation)
-    }
-    
-    // MARK:- Scroll View Delegate
-    
-    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        guard let height = navigationController?.navigationBar.frame.height else { return }
-        moveAndResizeImage(for: height)
-        moveAndResizeLabel(for: height)
-    }
-    
     // MARK:- Refreshing
     
     @objc private func checkTwitterForUpdates() {
@@ -162,21 +39,10 @@ class TwitterUserCollectionViewController: UICollectionViewController, UICollect
         }
     }
     
-    private func showImage(_ show: Bool) {
-        self.navigationController?.title = nil
-        UIView.animate(withDuration: 0.1) {
-            self.imageView.alpha = show ? 1.0 : 0.0
-        }
-    }
-    
     // MARK:- View Controller Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionView?.prefetchDataSource = self
-        
-        // Configure navigation bar
-        navigationController?.navigationBar.prefersLargeTitles = true
-        setupUI()
         
         // Listen for the app becoming active - this could happen after hours of being inactive, so there could definitely be new unread tweets
         let notificationCenter = NotificationCenter.default
@@ -206,14 +72,10 @@ class TwitterUserCollectionViewController: UICollectionViewController, UICollect
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         OrientationEnforcer.lockOrientation(.allButUpsideDown)
-        showImage(false)
-        userLabel.isHidden = true
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        showImage(true)
-        userLabel.isHidden = false
     }
  
     // MARK: UICollectionViewDataSource

@@ -56,12 +56,23 @@ class AuthenticationViewController: UIViewController, SFSafariViewControllerDele
         }
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        OrientationEnforcer.lockOrientation(.portrait, andRotateTo: .portrait)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        OrientationEnforcer.lockOrientation(.allButUpsideDown)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         swifter = appDelegate.swifter
         let thisLoginScreen = loginScreen()
         
+        OrientationEnforcer.lockOrientation(.portrait, andRotateTo: .portrait)
         backgroundImageView.image = thisLoginScreen.backgroundImage
         loginButton.frame = thisLoginScreen.loginButtonRect
         loginButton.isHidden = false

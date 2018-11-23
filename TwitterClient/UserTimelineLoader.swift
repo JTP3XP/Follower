@@ -46,6 +46,9 @@ extension UserTimelineLoader {
             userTimelineTableViewController.threadedTweets = threadedTimelineTweets
             userTimelineTableViewController.user = user
             userTimelineTableViewController.navigationBarTitle = user.fullName
+            if #available(iOS 11.0, *) {
+                userTimelineTableViewController.navigationItem.largeTitleDisplayMode = .never
+            }
             
             selfUIViewController.navigationController?.pushViewController(userTimelineTableViewController, animated: true)
             

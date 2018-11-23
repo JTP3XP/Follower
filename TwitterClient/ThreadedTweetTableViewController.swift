@@ -147,6 +147,16 @@ class ThreadedTweetTableViewController: UITableViewController, TweetTableViewCel
         
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        OrientationEnforcer.lockOrientation(.portrait)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        OrientationEnforcer.lockOrientation(.allButUpsideDown)
+    }
+    
     // MARK:- Data Loading
     
     internal func loadTable() {
@@ -220,6 +230,10 @@ extension ThreadedTweetTableViewController {
         let imageInfo = GSImageInfo(image: image, imageMode: .aspectFit)
         let transitionInfo = GSTransitionInfo(fromView: view)
         let imageViewer = GSImageViewerController(imageInfo: imageInfo, transitionInfo: transitionInfo)
+        imageViewer.dismissCompletion = {
+            OrientationEnforcer.lockOrientation(.portrait, andRotateTo: .portrait)
+        }
+        OrientationEnforcer.lockOrientation(.allButUpsideDown)
         present(imageViewer, animated: true, completion: nil)
     }
 

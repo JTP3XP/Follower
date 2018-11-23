@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="nHj-1R-RTw">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="nHj-1R-RTw">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -68,7 +68,7 @@
             </objects>
             <point key="canvasLocation" x="391" y="116"/>
         </scene>
-        <!--Following-->
+        <!--Twitter User Collection View Controller-->
         <scene sceneID="dga-bv-rek">
             <objects>
                 <collectionViewController id="bzX-wd-mU8" customClass="TwitterUserCollectionViewController" customModule="TwitterClient" customModuleProvider="target" sceneMemberID="viewController">
@@ -147,7 +147,7 @@
                             <outlet property="delegate" destination="bzX-wd-mU8" id="5tH-HJ-D3L"/>
                         </connections>
                     </collectionView>
-                    <navigationItem key="navigationItem" title="Following" id="hi6-v1-L9w">
+                    <navigationItem key="navigationItem" id="hi6-v1-L9w">
                         <barButtonItem key="rightBarButtonItem" title="Test" id="rxn-HQ-UFJ">
                             <connections>
                                 <action selector="testButtonPressed:" destination="bzX-wd-mU8" id="BOx-l9-h3k"/>
@@ -584,7 +584,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="@username" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="Sg5-mH-mlF">
-                                            <rect key="frame" x="142" y="8" width="81.5" height="18"/>
+                                            <rect key="frame" x="142" y="8" width="81.5" height="19"/>
                                             <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
                                             <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                             <nil key="highlightedColor"/>
@@ -603,19 +603,31 @@
                                             </constraints>
                                         </imageView>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="First Last" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="ijG-TT-cwE">
-                                            <rect key="frame" x="64" y="8" width="74" height="18"/>
+                                            <rect key="frame" x="64" y="8" width="74" height="19"/>
                                             <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="B6T-eS-12O">
-                                            <rect key="frame" x="0.0" y="91" width="375" height="187.5"/>
+                                            <rect key="frame" x="0.0" y="92" width="375" height="187.5"/>
+                                            <subviews>
+                                                <view hidden="YES" alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WsI-ci-CEZ">
+                                                    <rect key="frame" x="0.0" y="0.0" width="375" height="187.5"/>
+                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </view>
+                                            </subviews>
                                             <constraints>
+                                                <constraint firstAttribute="bottom" secondItem="WsI-ci-CEZ" secondAttribute="bottom" constant="-0.5" id="A6v-Pv-bmL"/>
+                                                <constraint firstAttribute="trailing" secondItem="WsI-ci-CEZ" secondAttribute="trailing" id="DdV-Wf-VNc"/>
+                                                <constraint firstItem="WsI-ci-CEZ" firstAttribute="centerY" secondItem="B6T-eS-12O" secondAttribute="centerY" id="IWo-io-1N9"/>
+                                                <constraint firstItem="WsI-ci-CEZ" firstAttribute="centerX" secondItem="B6T-eS-12O" secondAttribute="centerX" id="Rod-e9-hIV"/>
+                                                <constraint firstItem="WsI-ci-CEZ" firstAttribute="leading" secondItem="B6T-eS-12O" secondAttribute="leading" id="ZG6-1i-iEY"/>
+                                                <constraint firstItem="WsI-ci-CEZ" firstAttribute="top" secondItem="B6T-eS-12O" secondAttribute="top" id="dxb-Pe-9RK"/>
                                                 <constraint firstAttribute="width" secondItem="B6T-eS-12O" secondAttribute="height" multiplier="2:1" id="xyh-vw-XjK"/>
                                             </constraints>
                                         </scrollView>
                                         <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" hidesForSinglePage="YES" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="JT1-wI-HKa">
-                                            <rect key="frame" x="168" y="241.5" width="39" height="37"/>
+                                            <rect key="frame" x="168" y="242.5" width="39" height="37"/>
                                         </pageControl>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Vs8-MZ-pFI">
                                             <rect key="frame" x="8" y="8" width="48" height="48"/>
@@ -624,7 +636,7 @@
                                             </connections>
                                         </button>
                                         <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" editable="NO" text="Tweet tweet tweet tweet tweet tweet tweet tweet tweet" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="10n-s3-rBI">
-                                            <rect key="frame" x="64" y="26" width="303" height="60"/>
+                                            <rect key="frame" x="64" y="27" width="303" height="60"/>
                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>

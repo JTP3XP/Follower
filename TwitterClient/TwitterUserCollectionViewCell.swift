@@ -30,6 +30,7 @@ class TwitterUserCollectionViewCell: UICollectionViewCell {
         usernameLabel.text = "@\(twitterUser.username!)"
         
         // Set profile picture
+        profileImageView.image = UIImage(named: "Twitter Default User Image")
         if let profileImageURL = twitterUser.profileImageURL {
             if displayedProfileImageURL != profileImageURL {
                 profileImageView.kf.setImage(with: URL(string: profileImageURL))

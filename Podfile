@@ -8,4 +8,5 @@ target 'TwitterClient' do
   # Pods for TwitterClient
   pod 'Kingfisher', '~> 4.0'
   pod 'GSImageViewerController', '~> 1.4'
+  pod 'SideMenu'
 end

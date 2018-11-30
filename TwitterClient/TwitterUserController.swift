@@ -34,7 +34,6 @@ class TwitterUserController {
         swifter.getUserFollowingIDs(for: authenticatedUser, stringifyIDs: true, success: { json, _, _ in
             if let array = json.array {
                 let userIDStrings = array.map({$0.string!})
-                print(userIDStrings)
                 let usersArray = UsersTag.id(userIDStrings)
                 var twitterUserArray = [TwitterUser]()
                 self.swifter.lookupUsers(for: usersArray, success: { (json) in

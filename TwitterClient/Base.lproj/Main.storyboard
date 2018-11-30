@@ -45,7 +45,7 @@
                     <connections>
                         <outlet property="backgroundImageView" destination="waC-kZ-maB" id="Hms-Rl-WRP"/>
                         <outlet property="loginButton" destination="PIB-GY-eUj" id="rCr-Ur-3mS"/>
-                        <segue destination="7nJ-2s-BPH" kind="show" identifier="LoginSuccess2" id="weB-a6-6AW"/>
+                        <segue destination="7nJ-2s-BPH" kind="show" identifier="LoginSuccess" id="weB-a6-6AW"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="auz-Rl-hHk" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -61,7 +61,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
-                        <segue destination="bzX-wd-mU8" kind="relationship" relationship="rootViewController" id="c6A-NR-RVW"/>
+                        <segue destination="bzX-wd-mU8" kind="relationship" relationship="rootViewController" id="yPr-ie-6X3"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JY0-cP-doo" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -148,16 +148,16 @@
                         </connections>
                     </collectionView>
                     <navigationItem key="navigationItem" id="hi6-v1-L9w">
-                        <barButtonItem key="rightBarButtonItem" title="Test" id="rxn-HQ-UFJ">
+                        <barButtonItem key="rightBarButtonItem" title="Account" id="rxn-HQ-UFJ">
                             <connections>
-                                <action selector="testButtonPressed:" destination="bzX-wd-mU8" id="BOx-l9-h3k"/>
+                                <segue destination="qMc-zR-FXQ" kind="presentation" id="TdM-pc-ugi"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1UL-nm-qCm" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1333.5999999999999" y="115.59220389805098"/>
+            <point key="canvasLocation" x="1343" y="116"/>
         </scene>
         <!--Title-->
         <scene sceneID="LQA-wN-qO7">
@@ -704,7 +704,119 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="c68-dA-4uG" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2228" y="115.59220389805098"/>
+            <point key="canvasLocation" x="2238" y="116"/>
+        </scene>
+        <!--Side Menu Table View Controller-->
+        <scene sceneID="wMU-s5-ZvA">
+            <objects>
+                <tableViewController id="uTm-Hg-SX5" customClass="SideMenuTableViewController" customModule="TwitterClient" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="eii-9B-nLg">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <sections>
+                            <tableViewSection id="Wyo-lP-eFP">
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="Account Image Table View Cell" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="Account Image Cell" rowHeight="178" id="YR2-dG-ThW" customClass="AccountImageTableViewCell" customModule="TwitterClient" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="178"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="YR2-dG-ThW" id="oa1-XS-yJi">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="177.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="0tX-Mi-1pd">
+                                                    <rect key="frame" x="124" y="5" width="127" height="127"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" secondItem="0tX-Mi-1pd" secondAttribute="height" multiplier="1:1" id="lUW-2V-BBD"/>
+                                                    </constraints>
+                                                </imageView>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="First Last" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="8" translatesAutoresizingMaskIntoConstraints="NO" id="CpK-HM-uQM">
+                                                    <rect key="frame" x="149.5" y="134" width="76" height="20"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="20" id="1md-ex-BQ9"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="@username" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wxT-5K-MW3">
+                                                    <rect key="frame" x="148.5" y="155" width="78.5" height="17.5"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="17.5" id="Azu-dy-GDc"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="0tX-Mi-1pd" firstAttribute="centerX" secondItem="oa1-XS-yJi" secondAttribute="centerX" id="6pz-9p-bMa"/>
+                                                <constraint firstItem="0tX-Mi-1pd" firstAttribute="top" secondItem="oa1-XS-yJi" secondAttribute="top" constant="5" id="And-zW-4ub"/>
+                                                <constraint firstItem="CpK-HM-uQM" firstAttribute="top" secondItem="0tX-Mi-1pd" secondAttribute="bottom" constant="2" id="UIc-Kt-7ej"/>
+                                                <constraint firstItem="wxT-5K-MW3" firstAttribute="centerX" secondItem="CpK-HM-uQM" secondAttribute="centerX" id="baf-Ee-9LR"/>
+                                                <constraint firstAttribute="bottom" secondItem="wxT-5K-MW3" secondAttribute="bottom" constant="5" id="eJK-e9-t1F"/>
+                                                <constraint firstItem="wxT-5K-MW3" firstAttribute="top" secondItem="CpK-HM-uQM" secondAttribute="bottom" constant="1" id="i5W-df-sTo"/>
+                                                <constraint firstItem="CpK-HM-uQM" firstAttribute="centerX" secondItem="0tX-Mi-1pd" secondAttribute="centerX" id="wK2-BZ-fGx"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="fullNameLabel" destination="CpK-HM-uQM" id="OQY-56-pNe"/>
+                                            <outlet property="profileImageView" destination="0tX-Mi-1pd" id="quf-Xh-LCz"/>
+                                            <outlet property="usernameLabel" destination="wxT-5K-MW3" id="6e7-Mc-dKH"/>
+                                        </connections>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="Log Out Cell" textLabel="h2l-yS-70n" style="IBUITableViewCellStyleDefault" id="MYQ-Kt-mMJ">
+                                        <rect key="frame" x="0.0" y="178" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="MYQ-Kt-mMJ" id="BtE-jB-1gH">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Log out" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="h2l-yS-70n">
+                                                    <rect key="frame" x="16" y="0.0" width="343" height="43.5"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <accessibility key="accessibilityConfiguration">
+                                                        <accessibilityTraits key="traits" none="YES"/>
+                                                    </accessibility>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                        </sections>
+                        <connections>
+                            <outlet property="dataSource" destination="uTm-Hg-SX5" id="6NF-Me-wuo"/>
+                            <outlet property="delegate" destination="uTm-Hg-SX5" id="CxE-CQ-VZh"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" id="JEd-ve-qxN"/>
+                    <connections>
+                        <outlet property="logOutCell" destination="MYQ-Kt-mMJ" id="FZL-qa-1ME"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="S6a-3O-vig" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2237.5999999999999" y="889.20539730134942"/>
+        </scene>
+        <!--Side Menu Navigation Controller-->
+        <scene sceneID="R99-VS-9Rg">
+            <objects>
+                <navigationController id="qMc-zR-FXQ" customClass="UISideMenuNavigationController" customModule="SideMenu" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="FmU-kz-6pA">
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="uTm-Hg-SX5" kind="relationship" relationship="rootViewController" id="lzu-Pm-UaS"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Cdz-Ly-V4L" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1342" y="890"/>
         </scene>
     </scenes>
     <resources>

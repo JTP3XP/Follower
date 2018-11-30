@@ -32,8 +32,10 @@ class TwitterUserCollectionViewController: UICollectionViewController, UICollect
         
         for user in displayedUsers {
             user.refresh(in: context) { [weak self] _ in
-                for cell in self?.collectionView!.visibleCells as! [TwitterUserCollectionViewCell] {
-                    cell.updateUI()
+                if self != nil {
+                    for cell in self?.collectionView!.visibleCells as! [TwitterUserCollectionViewCell] {
+                        cell.updateUI()
+                    }
                 }
             }
         }

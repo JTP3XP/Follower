@@ -18,8 +18,6 @@ class TwitterUserCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var usernameLabel: UILabel!
     @IBOutlet weak var unreadGlowImageView: UIImageView!
     
-    private var displayedProfileImageURL: String?
-    
     func updateUI() {
         
         guard let twitterUser = twitterUser else {
@@ -30,10 +28,11 @@ class TwitterUserCollectionViewCell: UICollectionViewCell {
         usernameLabel.text = "@\(twitterUser.username!)"
         
         // Set profile picture
-        profileImageView.image = UIImage(named: "Twitter Default User Image")
         if let profileImageURL = twitterUser.profileImageURL {
-            if displayedProfileImageURL != profileImageURL {
-                profileImageView.kf.setImage(with: URL(string: profileImageURL))
+            let image = UIImage(named: "Twitter Default User Image")
+            if profileImageView.image == nil {
+                // We clear the image when we dequeue the cell, so this will always be null when we need to update it
+                profileImageView.kf.setImage(with: URL(string: profileImageURL), placeholder: image)
             }
         }
         

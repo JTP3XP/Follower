@@ -112,6 +112,8 @@ class AuthenticationViewController: UIViewController, SFSafariViewControllerDele
         // Try to get a previously used token
         if let savedTokenPartsArray = UserDefaults.standard.array(forKey: "token") as? [String] {
             authorizedToken = Credential.OAuthAccessToken.init(queryString: assembleTokenQueryString(from: savedTokenPartsArray))
+        } else {
+            authorizedToken = nil // This clears out the token when the user has logged out, but this view controller had the token from a previous login
         }
         
         if authorizedToken == nil {
@@ -140,12 +142,31 @@ class AuthenticationViewController: UIViewController, SFSafariViewControllerDele
     func continueAfterSuccessfulLogin() {
         let twitterUserController = TwitterUserController()
         twitterUserController.updateFollowedUsers {
-            self.performSegue(withIdentifier: "LoginSuccess2", sender: self)
+            self.performSegue(withIdentifier: "LoginSuccess", sender: self)
+            
+            // Reset the UI in case the user logs out later and this is back on screen
+            self.loginButton.isEnabled = true
+        }
+
+        // Get the current user's info so we have it on hand for later
+        if let currentUserID = authorizedToken?.userID {
+            let container: NSPersistentContainer? = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer
+            let mainContext = container!.viewContext
+            
+            _ = swifter.showUser(for: UserTag.id(currentUserID), success: { userJSON in
+                do {
+                    try authenticatedUser = TwitterUser.findOrCreateTwitterUser(matching: userJSON, in: mainContext)
+                    try mainContext.save()
+                }
+                catch {
+                    print("Ran into an issue getting authenticated user info: \(error)")
+                }
+            }, failure: { _ in print("showUser failed for user ID \(currentUserID)") })
         }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "LoginSuccess2" {
+        if segue.identifier == "LoginSuccess" {
             if let twitterUserCollectionViewController = segue.destination.contents as? TwitterUserCollectionViewController {
                 let twitterUserController = TwitterUserController()
                 // TODO: Enhance sorting to be more helpful

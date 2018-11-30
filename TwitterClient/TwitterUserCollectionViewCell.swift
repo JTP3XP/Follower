@@ -32,7 +32,8 @@ class TwitterUserCollectionViewCell: UICollectionViewCell {
             let image = UIImage(named: "Twitter Default User Image")
             if profileImageView.image == nil {
                 // We clear the image when we dequeue the cell, so this will always be null when we need to update it
-                profileImageView.kf.setImage(with: URL(string: profileImageURL), placeholder: image)
+                let processor = RoundCornerImageProcessor(cornerRadius: profileImageView.frame.width / 2)
+                profileImageView.kf.setImage(with: URL(string: profileImageURL), placeholder: image, options: [.processor(processor)])
             }
         }
         
@@ -51,7 +52,7 @@ class TwitterUserCollectionViewCell: UICollectionViewCell {
         profileImageView.layer.borderWidth = 1
         profileImageView.layer.masksToBounds = false
         profileImageView.layer.borderColor = UIColor.black.cgColor
-        profileImageView.layer.cornerRadius = profileImageView.frame.height / 2
+        profileImageView.layer.cornerRadius = profileImageView.frame.width / 2
         profileImageView.clipsToBounds = true
     }
     

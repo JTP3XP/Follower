@@ -11,7 +11,13 @@ import Kingfisher
 
 class TwitterUserCollectionViewCell: UICollectionViewCell {
     
-    var twitterUser: TwitterUser? { didSet { updateUI() } }
+    var twitterUser: TwitterUser? {
+        didSet {
+            if twitterUser != oldValue || profileImageView.image == nil { // We might dequeue a cell for the same user as previously shown in the cell, so we need to check for a nil image as well
+                updateUI()
+            }
+        }
+    }
     
     @IBOutlet weak var profileImageView: UIImageView!
     @IBOutlet weak var fullNameLabel: UILabel!
@@ -32,8 +38,7 @@ class TwitterUserCollectionViewCell: UICollectionViewCell {
             let image = UIImage(named: "Twitter Default User Image")
             if profileImageView.image == nil {
                 // We clear the image when we dequeue the cell, so this will always be null when we need to update it
-                let processor = RoundCornerImageProcessor(cornerRadius: profileImageView.frame.width / 2)
-                profileImageView.kf.setImage(with: URL(string: profileImageURL), placeholder: image, options: [.processor(processor)])
+                profileImageView.kf.setImage(with: URL(string: profileImageURL), placeholder: image)
             }
         }
         
@@ -47,13 +52,13 @@ class TwitterUserCollectionViewCell: UICollectionViewCell {
     
     // MARK: Lifecycle methods
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
+    override func layoutIfNeeded() {
+        super.layoutIfNeeded()
+        
+        profileImageView.layer.cornerRadius = self.profileImageView.bounds.width / 2
         profileImageView.layer.borderWidth = 1
         profileImageView.layer.masksToBounds = false
         profileImageView.layer.borderColor = UIColor.black.cgColor
-        profileImageView.layer.cornerRadius = profileImageView.frame.width / 2
         profileImageView.clipsToBounds = true
     }
-    
 }

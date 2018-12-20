@@ -14,6 +14,9 @@ class TweetImageTableViewCell: TweetTableViewCell, UIScrollViewDelegate {
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var pageControl: UIPageControl!
     
+    var numberOfImages = 0
+    var scrollViewImageViews = [UIImageView]()
+    
     override func updateUI() {
         super.updateUI()
         
@@ -22,7 +25,7 @@ class TweetImageTableViewCell: TweetTableViewCell, UIScrollViewDelegate {
         }
         
         let tweetImages = tweetImageSet.allObjects as! [TweetImage]
-        let numberOfImages = tweetImages.count
+        numberOfImages = tweetImages.count
         pageControl.numberOfPages = numberOfImages
         pageControl.currentPage = 0
         
@@ -35,6 +38,8 @@ class TweetImageTableViewCell: TweetTableViewCell, UIScrollViewDelegate {
             // Clear out images from the last use of the cell
             subview.removeFromSuperview()
         }
+        
+        scrollViewImageViews = [UIImageView]() // Clear this out for new cell
         
         for imageNumber in 0..<numberOfImages {
             // Create and add an image view for each image
@@ -51,6 +56,9 @@ class TweetImageTableViewCell: TweetTableViewCell, UIScrollViewDelegate {
             let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageTapped(sender:)))
             newImageView.addGestureRecognizer(tapRecognizer)
             newImageView.isUserInteractionEnabled = true
+            
+            // Add to array of image views so we can easily resize when we layout subviews
+            scrollViewImageViews.append(newImageView)
         }
     }
 
@@ -80,6 +88,21 @@ class TweetImageTableViewCell: TweetTableViewCell, UIScrollViewDelegate {
         }
     }
     
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        let scrollViewWidth: CGFloat = scrollView.frame.width
+        let scrollViewHeight: CGFloat = scrollView.frame.height
+        scrollView.delegate = self
+        scrollView.contentSize = CGSize(width: scrollView.frame.width * CGFloat(numberOfImages), height: scrollView.frame.height)
+        
+        var imageIndex = 0
+        
+        for imageView in scrollViewImageViews {
+            imageView.frame = CGRect(x: CGFloat(imageIndex) * scrollViewWidth, y: 0, width: scrollViewWidth, height: scrollViewHeight)
+            imageIndex = imageIndex + 1
+        }
+    }
 }
 
 extension TweetTableViewCellDelegate {

@@ -560,7 +560,7 @@
 				DEVELOPMENT_TEAM = 63NZ645GEQ;
 				INFOPLIST_FILE = TwitterClient/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.johnpattonxp.TwitterClient;
+				PRODUCT_BUNDLE_IDENTIFIER = com.johnpattonxp.Follower;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 			};
@@ -575,7 +575,7 @@
 				DEVELOPMENT_TEAM = 63NZ645GEQ;
 				INFOPLIST_FILE = TwitterClient/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.johnpattonxp.TwitterClient;
+				PRODUCT_BUNDLE_IDENTIFIER = com.johnpattonxp.Follower;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 			};

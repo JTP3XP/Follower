@@ -76,10 +76,6 @@ class AuthenticationViewController: UIViewController, SFSafariViewControllerDele
         backgroundImageView.image = thisLoginScreen.backgroundImage
         loginButton.frame = thisLoginScreen.loginButtonRect
         loginButton.isHidden = false
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
         
         // Check if we already have a token and login without waiting for user input if we do
         if let savedTokenPartsArray = UserDefaults.standard.array(forKey: "token") as? [String] {

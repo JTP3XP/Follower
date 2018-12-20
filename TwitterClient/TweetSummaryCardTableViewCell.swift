@@ -16,6 +16,7 @@ class TweetSummaryCardTableViewCell: TweetTableViewCell {
     @IBOutlet weak var cardSubtitleLabel: UILabel!
     
     private var cardType: CardType?
+    private var borders = [CALayer]()
     
     private enum CardType {
         case image
@@ -42,6 +43,22 @@ class TweetSummaryCardTableViewCell: TweetTableViewCell {
             cardImageView.kf.setImage(with: URL(string: linkImageURL))
         }
         
+        // Set up a tap gesture recognizer on all parts of the card
+        for cardView in cardViews {
+            let cardTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(cardTapped))
+            cardView.isUserInteractionEnabled = true
+            cardView.addGestureRecognizer(cardTapGestureRecognizer)
+        }
+
+    }
+    
+    func clearBorders() {
+        for border in borders {
+            border.removeFromSuperlayer()
+        }
+    }
+    
+    func drawEdge() {
         // Add border between image and title
         var edgeThatNeedsBorder: UIRectEdge
         if let borderColor = cardView.borderColor, let cardType = cardType {
@@ -51,14 +68,9 @@ class TweetSummaryCardTableViewCell: TweetTableViewCell {
             case .video:
                 edgeThatNeedsBorder = UIRectEdge.right
             }
-            cardImageView.layer.addBorder(edge: edgeThatNeedsBorder, color: borderColor, thickness: cardView.borderWidth)
-        }
-        
-        // Set up a tap gesture recognizer on all parts of the card
-        for cardView in cardViews {
-            let cardTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(cardTapped))
-            cardView.isUserInteractionEnabled = true
-            cardView.addGestureRecognizer(cardTapGestureRecognizer)
+            cardImageView.layer.addBorder(edge: edgeThatNeedsBorder, color: borderColor, thickness: cardView.borderWidth) { [weak self] (newBorder) in
+                self?.borders.append(newBorder)
+            }
         }
     }
     
@@ -72,6 +84,12 @@ class TweetSummaryCardTableViewCell: TweetTableViewCell {
             //UIApplication.shared.open(cardURL, options: [:], completionHandler: nil)
             askDelegateToOpenInSafariViewController(url: cardURL)
         }
+    }
+    
+    override func layoutIfNeeded() {
+        super.layoutIfNeeded()
+        clearBorders()
+        drawEdge()
     }
     
     // MARK:- Convenience Functions
@@ -102,7 +120,7 @@ class TweetSummaryCardTableViewCell: TweetTableViewCell {
 
 extension CALayer {
     
-    func addBorder(edge: UIRectEdge, color: UIColor, thickness: CGFloat) {
+    func addBorder(edge: UIRectEdge, color: UIColor, thickness: CGFloat, completionHandler: ((CALayer) -> ())? = nil) {
         
         let border = CALayer()
         
@@ -126,5 +144,9 @@ extension CALayer {
         border.backgroundColor = color.cgColor;
         
         self.addSublayer(border)
+        
+        if let completionHandler = completionHandler {
+            completionHandler(border)
+        }
     }
 }

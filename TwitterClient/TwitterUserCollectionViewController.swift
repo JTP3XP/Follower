@@ -24,9 +24,7 @@ class TwitterUserCollectionViewController: UICollectionViewController, UICollect
     // MARK:- Refreshing
     
     @objc private func checkTwitterForUpdates() {
-        
-        print("Checking for updates...")
-        
+ 
         let container: NSPersistentContainer? = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer
         guard let context = container?.viewContext else { return }
         
@@ -79,7 +77,7 @@ class TwitterUserCollectionViewController: UICollectionViewController, UICollect
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
     }
- 
+
     // MARK: UICollectionViewDataSource
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -95,7 +93,10 @@ class TwitterUserCollectionViewController: UICollectionViewController, UICollect
         
         // Configure the cell
         cell.twitterUser = displayedUsers[indexPath.row]
-    
+        
+        cell.setNeedsLayout()
+        cell.layoutIfNeeded()
+        
         return cell
     }
 
@@ -105,7 +106,7 @@ class TwitterUserCollectionViewController: UICollectionViewController, UICollect
         
         let selectedUser = displayedUsers[indexPath.row]
         loadTimeline(for: selectedUser)
-        
+
     }
     
     // MARK: UICollectionViewDelegateFlowLayout
@@ -114,6 +115,7 @@ class TwitterUserCollectionViewController: UICollectionViewController, UICollect
         let flowLayout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
         let marginsAndInsets = flowLayout.sectionInset.left + flowLayout.sectionInset.right + flowLayout.minimumInteritemSpacing * CGFloat(cellsPerRow - 1)
         let itemWidth = ((collectionView.bounds.size.width - marginsAndInsets) / CGFloat(cellsPerRow)).rounded(.down)
+        
         return CGSize(width: itemWidth, height: itemWidth)
     }
     

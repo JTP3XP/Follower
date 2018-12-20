@@ -126,9 +126,7 @@ class TweetThreader {
             if redundantTweets < threadedTweet.count {
                 uniqueThreads.append(threadedTweet)
                 //print("Found a unique thread - \(redundantTweets)/\(threadedTweet.count) redundant. Starts with \(threadedTweet[0]["text"])")
-            } else {
-                print("Dropped a redundant thread")
-            }
+            } 
         }
         
         return uniqueThreads

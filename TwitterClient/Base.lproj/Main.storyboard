@@ -130,8 +130,8 @@
                                     <constraint firstItem="4pc-x0-MHv" firstAttribute="height" secondItem="hPT-N9-MRv" secondAttribute="height" multiplier="1.25" id="fVn-vk-Jy4"/>
                                     <constraint firstItem="KwF-RZ-lLg" firstAttribute="centerX" secondItem="1cg-dl-6sk" secondAttribute="centerX" id="ga4-ps-8KV"/>
                                     <constraint firstItem="KwF-RZ-lLg" firstAttribute="top" secondItem="hPT-N9-MRv" secondAttribute="bottom" constant="2" id="jaC-BR-eHl"/>
+                                    <constraint firstItem="4pc-x0-MHv" firstAttribute="top" secondItem="1cg-dl-6sk" secondAttribute="top" id="kff-9G-Rqh"/>
                                     <constraint firstItem="hPT-N9-MRv" firstAttribute="centerX" secondItem="1cg-dl-6sk" secondAttribute="centerX" id="mC0-IL-8uV"/>
-                                    <constraint firstItem="4pc-x0-MHv" firstAttribute="top" secondItem="1cg-dl-6sk" secondAttribute="top" id="ndX-e1-jZL"/>
                                     <constraint firstItem="KwF-RZ-lLg" firstAttribute="width" relation="lessThanOrEqual" secondItem="1cg-dl-6sk" secondAttribute="width" id="wlc-ig-L1p"/>
                                 </constraints>
                                 <connections>
@@ -168,7 +168,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="Header Cell" rowHeight="41" id="cxw-HU-UbG">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="Header Cell" rowHeight="41" id="cxw-HU-UbG">
                                 <rect key="frame" x="0.0" y="28" width="375" height="41"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="cxw-HU-UbG" id="TkC-uD-huv">
@@ -189,7 +189,7 @@
                                 </tableViewCellContentView>
                                 <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="Action Cell" rowHeight="37" id="iY2-Pv-zAD" customClass="ActionTableViewCell" customModule="TwitterClient" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="Action Cell" rowHeight="37" id="iY2-Pv-zAD" customClass="ActionTableViewCell" customModule="TwitterClient" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="69" width="375" height="37"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="iY2-Pv-zAD" id="a2U-3I-TVV">

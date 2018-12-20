@@ -66,6 +66,9 @@ class ThreadedTweetTableViewController: UITableViewController, TweetTableViewCel
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        var forceLayoutUpdate = false
+        
         switch threadedTweetTableContents[indexPath.section][indexPath.row] {
         case .tweet(let tweet):
             
@@ -84,11 +87,18 @@ class ThreadedTweetTableViewController: UITableViewController, TweetTableViewCel
                 default:
                     reuseIdentifierForCell = reuseIdentifierForSummaryCard
                 }
+                forceLayoutUpdate = true
             }
 
             let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifierForCell, for: indexPath) as! TweetTableViewCell
             cell.tweet = tweet
             cell.delegate = self
+            
+            if forceLayoutUpdate {
+                cell.setNeedsLayout()
+                cell.layoutIfNeeded()
+            }
+            
             return cell
         case .action(let action):
             let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifierForAction, for: indexPath) as! ActionTableViewCell

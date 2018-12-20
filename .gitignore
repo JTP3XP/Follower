@@ -2,3 +2,5 @@ debug.xcconfig
 release.xcconfig
 project.pbxproj
 Pods
+TwitterClient.xcworkspace/xcshareddata
+TwitterClient.xcworkspace/xcuserdata

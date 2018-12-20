@@ -1,0 +1,24 @@
+PODS:
+  - GSImageViewerController (1.5.1)
+  - Kingfisher (4.10.1)
+  - SideMenu (5.0.3)
+
+DEPENDENCIES:
+  - GSImageViewerController (~> 1.4)
+  - Kingfisher (~> 4.0)
+  - SideMenu
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - GSImageViewerController
+    - Kingfisher
+    - SideMenu
+
+SPEC CHECKSUMS:
+  GSImageViewerController: 2bf1a8b45e5923ff5957c78ace6778c0b50fea96
+  Kingfisher: c148cd7b47ebde9989f6bc7c27dcaa79d81279a0
+  SideMenu: 1dcaabce84538c53325c287f7fe62999379a641c
+
+PODFILE CHECKSUM: fa2337ba5f7173e825f5ca4c884464bcca0d814c
+
+COCOAPODS: 1.5.3

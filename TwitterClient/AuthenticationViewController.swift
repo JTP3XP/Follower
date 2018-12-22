@@ -96,7 +96,8 @@ class AuthenticationViewController: UIViewController, SFSafariViewControllerDele
     
     func login() {
         let failureHandler: (Error) -> Void = { error in
-            self.alert("Error", message: error.localizedDescription)
+            self.alert("Whoops!", message: "We ran into an issue when logging you in. Please try again.")
+            self.loginButton.isEnabled = true
         }
         
         // Set UI to how it should look while we are logging in

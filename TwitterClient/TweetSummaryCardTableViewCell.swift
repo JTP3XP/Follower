@@ -38,9 +38,8 @@ class TweetSummaryCardTableViewCell: TweetTableViewCell {
         cardSubtitleLabel.text = generateCardSubtitle()
         
         // Set link picture
-        cardImageView.image = nil
         if let linkImageURL = tweet?.card?.imageURL {
-            cardImageView.kf.setImage(with: URL(string: linkImageURL))
+            cardImageView.kf.setImage(with: URL(string: linkImageURL), placeholder: UIImage(named: "CameraIcon2x1"))
         }
         
         // Set up a tap gesture recognizer on all parts of the card
@@ -81,7 +80,6 @@ class TweetSummaryCardTableViewCell: TweetTableViewCell {
 
     @objc func cardTapped() {
         if let cardURLString = tweet?.card?.relatedTweetURL?.twitterVersionOfURLString, let cardURL = URL(string: cardURLString) {
-            //UIApplication.shared.open(cardURL, options: [:], completionHandler: nil)
             askDelegateToOpenInSafariViewController(url: cardURL)
         }
     }

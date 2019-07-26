@@ -18,7 +18,7 @@ class TweetImage: NSManagedObject {
             enum TweetError: Error {
                 case runtimeError(String)
             }
-            throw TweetError.runtimeError("Passed incompatible JSON to findOrCreateTweetImage")
+            throw TweetError.runtimeError("Passed incompatible JSON to createTweetImage")
         }
         
         let request: NSFetchRequest<TweetImage> = TweetImage.fetchRequest()
@@ -27,7 +27,7 @@ class TweetImage: NSManagedObject {
         do {
             let matches = try context.fetch(request)
             if matches.count > 0 {
-                assert(matches.count == 1, "TweetImage.findOrCreateTweetImage -- database inconsistency!")
+                assert(matches.count == 1, "TweetImage.createTweetImage -- database inconsistency!")
                 return matches[0]
             }
         } catch {

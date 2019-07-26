@@ -34,6 +34,7 @@ class ThreadedTweetTableViewController: UITableViewController, TweetTableViewCel
     
     private let reuseIdentifierForBasic: String = "Basic Tweet Cell"
     private let reuseIdentifierForImage: String = "Image Tweet Cell"
+    private let reuseIdentifierForVideo: String = "Video Tweet Cell"
     private let reuseIdentifierForSummaryCard: String = "Summary Card Tweet Cell"
     private let reuseIdentifierForPlayerCard: String = "Player Card Tweet Cell"
     private let reuseIdentifierForAction: String = "Action Cell"
@@ -77,6 +78,10 @@ class ThreadedTweetTableViewController: UITableViewController, TweetTableViewCel
             
             if let tweetImageSet = tweet.images, tweetImageSet.count > 0 {
                 reuseIdentifierForCell = reuseIdentifierForImage
+            }
+            
+            if tweet.video != nil {
+                reuseIdentifierForCell = reuseIdentifierForVideo
             }
             
             // People often attach an image that is redundant with the card that would be built. In these cases we want to display as a card view

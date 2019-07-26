@@ -131,7 +131,7 @@ class Tweet: NSManagedObject {
             }
         }
         
-        // Get images
+        // Get images and videos
         if let mediaJSONArray = tweetJSON["extended_entities"]["media"].array {
             for mediaJSON in mediaJSONArray where mediaJSON["type"] == "photo" {
                 do {
@@ -141,6 +141,16 @@ class Tweet: NSManagedObject {
                     throw error
                 }
             }
+            
+            for mediaJSON in mediaJSONArray where (mediaJSON["type"].string == "video" || mediaJSON["type"].string == "animated_gif") {
+                do {
+                    let newVideo = try TweetVideo.findOrCreateTweetVideo(matching: mediaJSON, in: context)
+                    newVideo.tweet = tweet
+                } catch {
+                    throw error
+                }
+            }
+            
         }
 
         // Build card if tweet should have one

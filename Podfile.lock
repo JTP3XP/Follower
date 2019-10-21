@@ -1,7 +1,7 @@
 PODS:
-  - GSImageViewerController (1.5.1)
+  - GSImageViewerController (1.6.2)
   - Kingfisher (4.10.1)
-  - SideMenu (5.0.3)
+  - SideMenu (6.4.4)
 
 DEPENDENCIES:
   - GSImageViewerController (~> 1.4)
@@ -15,9 +15,9 @@ SPEC REPOS:
     - SideMenu
 
 SPEC CHECKSUMS:
-  GSImageViewerController: 2bf1a8b45e5923ff5957c78ace6778c0b50fea96
+  GSImageViewerController: 3b8fb7d2ab7596152329d7910eeb1905b2284cb9
   Kingfisher: c148cd7b47ebde9989f6bc7c27dcaa79d81279a0
-  SideMenu: 1dcaabce84538c53325c287f7fe62999379a641c
+  SideMenu: e49a7d61d1f50e9bdaa866bbb9fc7d903c6400ed
 
 PODFILE CHECKSUM: 997828fb60dbeee6fc35bb289bc0b9fc0df41789
 

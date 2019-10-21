@@ -32,7 +32,7 @@ class TweetTableViewCell: UITableViewCell {
         
         fullNameLabel.text = tweet.tweeter!.fullName
         usernameLabel.text = "@\(tweet.tweeter!.username!)"
-        tweetTextView.attributedText = NSAttributedString(string: tweet.displayText ?? "")
+        tweetTextView.attributedText = NSAttributedString(string: tweet.displayText ?? "", attributes: [.font: UIFontMetrics(forTextStyle: .body).scaledFont(for: UIFont.preferredFont(forTextStyle: .body))])
         tweetTimeLabel.text = (tweet.date! as Date).generateRelativeTimestamp()
         
         // Set profile picture
@@ -89,6 +89,7 @@ class TweetTableViewCell: UITableViewCell {
 protocol TweetTableViewCellDelegate {
     func openInSafariViewController(url: URL)
     func loadTimeline(forSelected user: TwitterUser)
+    func playVideo(fromURL: URL)
 }
 
 extension NSMutableAttributedString {

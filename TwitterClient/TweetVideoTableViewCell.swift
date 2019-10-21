@@ -8,29 +8,18 @@
 
 import UIKit
 import WebKit
+import AVFoundation
+import AVKit
 
 class TweetVideoTableViewCell: TweetTableViewCell {
 
-    @IBOutlet weak var videoWebView: WKWebView!
-    
-    override func updateUI() {
-        super.updateUI()
+    @IBAction func playVideo(_ sender: UIButton) {
+        guard let tweetVideoURLString = tweet?.video?.videoURL, let url = URL(string: tweetVideoURLString) else {
+            return
+        }
         
-        fullNameLabel.textColor = #colorLiteral(red: 0.8208763003, green: 0.1303744018, blue: 0.2447820008, alpha: 1)
+        delegate?.playVideo(fromURL: url)
         
     }
 
-    @IBAction func pressedPlay(_ sender: UIButton) {
-        
-        let configuration = WKWebViewConfiguration()
-        configuration.allowsInlineMediaPlayback = true
-        configuration.mediaTypesRequiringUserActionForPlayback = .all
-        let webView = WKWebView(frame: videoWebView.frame, configuration: configuration)
-        self.addSubview(webView)
-        
-        if let videoURL:URL = URL(string: "https://video.twimg.com/ext_tw_video/1095890409048264704/pu/vid/720x1280/Mf4zUxt944X3bkoP.mp4?tag=6") {
-            let request:URLRequest = URLRequest(url: videoURL)
-            webView.load(request)
-        }
-    }
 }

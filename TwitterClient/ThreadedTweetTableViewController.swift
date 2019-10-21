@@ -11,6 +11,7 @@ import SwifteriOS
 import SafariServices
 import Kingfisher
 import GSImageViewerController
+import AVKit
 
 class ThreadedTweetTableViewController: UITableViewController, TweetTableViewCellDelegate, UserTimelineLoader {
 
@@ -56,6 +57,18 @@ class ThreadedTweetTableViewController: UITableViewController, TweetTableViewCel
         present(safariViewController, animated: true, completion: nil)
     }
     
+    // MARK:- Tweet Video Player Delegate
+    func playVideo(fromURL: URL) {
+        let player = AVPlayer(url: fromURL)
+        
+        let controller = AVPlayerViewController()
+        controller.player = player
+        
+        present(controller, animated: true) {
+            player.play()
+        }
+    }
+    
     // MARK: - Table View Data Source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -82,6 +95,7 @@ class ThreadedTweetTableViewController: UITableViewController, TweetTableViewCel
             
             if tweet.video != nil {
                 reuseIdentifierForCell = reuseIdentifierForVideo
+                forceLayoutUpdate = true
             }
             
             // People often attach an image that is redundant with the card that would be built. In these cases we want to display as a card view

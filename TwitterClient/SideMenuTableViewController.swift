@@ -20,9 +20,6 @@ class SideMenuTableViewController: UITableViewController, UserTimelineLoader {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.row == 1 {
-            
-        }
         
         switch indexPath.row {
         case 0:

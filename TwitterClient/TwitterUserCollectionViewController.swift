@@ -9,17 +9,25 @@
 import UIKit
 import CoreData
 import Kingfisher
+import SideMenu
 
 private let reuseIdentifier = "Twitter User Cell"
 
 class TwitterUserCollectionViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
 
+    
     var displayedUsers = [TwitterUser]()
     
     let margin: CGFloat = 5
     let cellsPerRow = 2
     
     internal var loadingView: UIAlertController?
+    
+    @IBAction func accountButton(_ sender: UIBarButtonItem) {
+        let accountMenuNavigationController = storyboard!.instantiateViewController(withIdentifier: "AccountMenu") as! SideMenuNavigationController
+        accountMenuNavigationController.statusBarEndAlpha = 0
+        present(accountMenuNavigationController, animated: true, completion: nil)
+    }
     
     // MARK:- Refreshing
     

@@ -115,7 +115,7 @@ class AuthenticationViewController: UIViewController, SFSafariViewControllerDele
         
         if authorizedToken == nil {
             // only authorize if we have not already
-            swifter.authorize(with: url, presentFrom: self, success: { [weak self] token, response in
+            swifter.authorize(withCallback: url, presentingFrom: self, success: { [weak self] token, response in
                 
                 // Save token
                 let tokenPartsArray: [String] = [
@@ -150,7 +150,7 @@ class AuthenticationViewController: UIViewController, SFSafariViewControllerDele
             let container: NSPersistentContainer? = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer
             let mainContext = container!.viewContext
             
-            _ = swifter.showUser(for: UserTag.id(currentUserID), success: { userJSON in
+            _ = swifter.showUser(UserTag.id(currentUserID), success: { userJSON in
                 do {
                     try authenticatedUser = TwitterUser.findOrCreateTwitterUser(matching: userJSON, in: mainContext)
                     try mainContext.save()

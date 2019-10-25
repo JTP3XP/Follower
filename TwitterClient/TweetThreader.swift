@@ -71,7 +71,7 @@ class TweetThreader {
         
         if let parentTweetID = tweet.parentID {
             
-            swifter.getTweet(forID: parentTweetID, tweetMode: TweetMode.extended, success: { parentTweetJSON in
+            swifter.getTweet(for: parentTweetID, tweetMode: TweetMode.extended, success: { parentTweetJSON in
 
                 let container: NSPersistentContainer? = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer
                 guard let context = container?.viewContext else { return }

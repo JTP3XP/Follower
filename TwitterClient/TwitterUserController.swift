@@ -31,7 +31,7 @@ class TwitterUserController {
     
     func getMyFollowedUsersFromTwitter(completionHandler: @escaping ([TwitterUser]) -> ()) {
         
-        swifter.getUserFollowingIDs(for: authenticatedUser, stringifyIDs: true, success: { json, _, _ in
+        swifter.getUserFollowingIDs(for: authenticatedUser, success: { json, _, _ in
             if let array = json.array {
                 let userIDStrings = array.map({$0.string!})
                 let usersArray = UsersTag.id(userIDStrings)

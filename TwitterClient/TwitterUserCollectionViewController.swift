@@ -15,7 +15,6 @@ private let reuseIdentifier = "Twitter User Cell"
 
 class TwitterUserCollectionViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
 
-    
     var displayedUsers = [TwitterUser]()
     
     let margin: CGFloat = 5

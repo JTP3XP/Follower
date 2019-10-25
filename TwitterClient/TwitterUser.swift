@@ -57,7 +57,7 @@ class TwitterUser: NSManagedObject {
     
     func refresh(in context: NSManagedObjectContext, completionHandler: @escaping (TwitterUser) -> ()) {
         if let swifter = (UIApplication.shared.delegate as! AppDelegate).swifter {
-            _ = swifter.showUser(for: UserTag.id(self.userID!), success: { userJSON in
+            _ = swifter.showUser(UserTag.id(self.userID!), success: { userJSON in
                 self.update(using: userJSON, in: context)
                 completionHandler(self)
             }, failure: { _ in

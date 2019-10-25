@@ -18,7 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var swifter: Swifter!
 
     func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
-        Swifter.handleOpenURL(url)
+        Swifter.handleOpenURL(url, callbackURL: url)
         return true
     }
     

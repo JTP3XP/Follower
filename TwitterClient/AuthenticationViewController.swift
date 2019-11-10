@@ -13,48 +13,11 @@ import SwifteriOS
 import SafariServices
 import CoreData
 
-class AuthenticationViewController: UIViewController, SFSafariViewControllerDelegate {
+class AuthenticationViewController: UIViewController {
     
     var swifter: Swifter!
     var authorizedToken: Credential.OAuthAccessToken?
     @IBOutlet weak var loginButton: UIButton!
-    @IBOutlet weak var backgroundImageView: UIImageView!
-
-    private struct loginScreen {
-        var backgroundImage: UIImage {
-            var backgroundImageName = ""
-            switch UIScreen.main.bounds.height {
-            case 568:
-                backgroundImageName = "4 inch Login Screen"
-            case 667:
-                backgroundImageName = "4.7 inch Login Screen"
-            case 736:
-                backgroundImageName = "5.5 inch Login Screen"
-            case 812:
-                backgroundImageName = "5.8 inch Login Screen"
-            default:
-                break
-            }
-            return UIImage(named: backgroundImageName)!
-        }
-        
-        var loginButtonRect: CGRect {
-            var buttonRect = CGRect()
-            switch UIScreen.main.bounds.height {
-            case 568:
-                buttonRect = CGRect(x: 19, y: 499, width: 283, height: 40)
-            case 667:
-                buttonRect = CGRect(x: 23, y: 592, width: 329, height: 47)
-            case 736:
-                buttonRect = CGRect(x: 28, y: 648, width: 359, height: 51)
-            case 812:
-                buttonRect = CGRect(x: 23, y: 678, width: 329, height: 47)
-            default:
-                break
-            }
-            return buttonRect
-        }
-    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -70,11 +33,8 @@ class AuthenticationViewController: UIViewController, SFSafariViewControllerDele
         super.viewDidLoad()
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         swifter = appDelegate.swifter
-        let thisLoginScreen = loginScreen()
-        
+    
         OrientationEnforcer.lockOrientation(.portrait, andRotateTo: .portrait)
-        backgroundImageView.image = thisLoginScreen.backgroundImage
-        loginButton.frame = thisLoginScreen.loginButtonRect
         loginButton.isHidden = false
         
         // Check if we already have a token and login without waiting for user input if we do
@@ -112,11 +72,11 @@ class AuthenticationViewController: UIViewController, SFSafariViewControllerDele
         } else {
             authorizedToken = nil // This clears out the token when the user has logged out, but this view controller had the token from a previous login
         }
-        
+         
         if authorizedToken == nil {
             // only authorize if we have not already
-            swifter.authorize(withCallback: url, presentingFrom: self, success: { [weak self] token, response in
-                
+            swifter.authorize(withCallback: url, presentingFrom: self, safariDelegate: self, success: { [weak self] token, response in
+
                 // Save token
                 let tokenPartsArray: [String] = [
                     token!.key,
@@ -178,11 +138,6 @@ class AuthenticationViewController: UIViewController, SFSafariViewControllerDele
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         self.present(alert, animated: true, completion: nil)
     }
-    
-    @available(iOS 9.0, *)
-    func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
-        controller.dismiss(animated: true, completion: nil)
-    }
 
 }
 
@@ -196,5 +151,13 @@ extension UIViewController {
         } else {
             return self
         }
+    }
+}
+
+extension AuthenticationViewController: SFSafariViewControllerDelegate {
+    @available(iOS 9.0, *)
+    func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
+        loginButton.isEnabled = true
+        controller.dismiss(animated: true, completion: nil)
     }
 }

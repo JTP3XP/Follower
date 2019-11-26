@@ -74,6 +74,13 @@ class TweetTableViewCell: UITableViewCell {
         profileImageView.layer.cornerRadius = profileImageView.frame.height / 2
         profileImageView.clipsToBounds = true
         
+        if #available(iOS 13.0, *) {
+            tweetTextView.textColor = UIColor.label
+            fullNameLabel.textColor = UIColor.label
+            usernameLabel.textColor = UIColor.secondaryLabel
+            tweetTimeLabel.textColor = UIColor.secondaryLabel
+        }
+        
         let fixedWidth = tweetTextView.frame.size.width
         let newSize = tweetTextView.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.greatestFiniteMagnitude))
         tweetTextView.frame.size = CGSize(width: max(newSize.width, fixedWidth), height: newSize.height)

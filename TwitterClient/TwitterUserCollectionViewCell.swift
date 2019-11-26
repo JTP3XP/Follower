@@ -60,5 +60,6 @@ class TwitterUserCollectionViewCell: UICollectionViewCell {
         profileImageView.layer.masksToBounds = false
         profileImageView.layer.borderColor = UIColor.black.cgColor
         profileImageView.clipsToBounds = true
+        
     }
 }

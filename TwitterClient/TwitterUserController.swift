@@ -33,33 +33,53 @@ class TwitterUserController {
         
         swifter.getUserFollowingIDs(for: authenticatedUser, success: { json, _, _ in
             if let array = json.array {
-                let userIDStrings = array.map({$0.string!})
-                let usersArray = UsersTag.id(userIDStrings)
                 var twitterUserArray = [TwitterUser]()
-                self.swifter.lookupUsers(for: usersArray, success: { (json) in
-                    guard let twitterUserJSONArray = json.array else { return }
-
-                    for twitterUserJSON in twitterUserJSONArray {
-                        do {
-                            let followedUser = try TwitterUser.findOrCreateTwitterUser(matching: twitterUserJSON, in: self.context)
-                            twitterUserArray.append(followedUser)
-                            if followedUser.isFollowed == false {
-                                followedUser.isFollowed = true
-                            }
-                        } catch {
-                            print("Error getting followed user")
-                        }
-                    }
-
-                    do {
-                        try self.context.save()
-                    } catch {
-                        fatalError("Failure to save context: \(error)")
-                    }
-
-                    completionHandler(twitterUserArray)
+                
+                let userIDStrings = array.map({$0.string!})
+                
+                // We can only lookup 100 uesrs at a time, so we need to break up our requests here and stitch the results back together
+                var userIDStringArrays = [[String]]()
+                let numberOfUsersToLookupAtATime = 100
+                var firstIndexOfThisArray = 0
+                while firstIndexOfThisArray <= userIDStrings.count {
+                    let lastIndexOfThisArray = min(firstIndexOfThisArray + numberOfUsersToLookupAtATime - 1, userIDStrings.count - 1)
+                    let thisArray = userIDStrings[firstIndexOfThisArray...lastIndexOfThisArray]
+                    userIDStringArrays.append(Array(thisArray))
+                    firstIndexOfThisArray = firstIndexOfThisArray + numberOfUsersToLookupAtATime
+                }
+                
+                for userIDStringArray in userIDStringArrays {
+                    let usersArray = UsersTag.id(userIDStringArray)
                     
-                }, failure: { _ in })
+                    self.swifter.lookupUsers(for: usersArray, success: { (json) in
+                        guard let twitterUserJSONArray = json.array else { return }
+
+                        for twitterUserJSON in twitterUserJSONArray {
+                            do {
+                                let followedUser = try TwitterUser.findOrCreateTwitterUser(matching: twitterUserJSON, in: self.context)
+                                twitterUserArray.append(followedUser)
+                                if followedUser.isFollowed == false {
+                                    followedUser.isFollowed = true
+                                }
+                            } catch {
+                                print("Error getting followed user")
+                            }
+                        }
+
+                        do {
+                            try self.context.save()
+                        } catch {
+                            fatalError("Failure to save context: \(error)")
+                        }
+                        
+                        if userIDStringArray.count < numberOfUsersToLookupAtATime { // This means we are on the last set of users to lookup
+                            completionHandler(twitterUserArray)
+                        }
+                        
+                    }, failure: { _ in
+                        print("Failed to lookup users")
+                    })
+                }
             }
         })
     }
